@@ -2,7 +2,7 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace TogglToJiraSync {
+namespace JiraWorklogReport {
 	public class UnixDateTimeConverter : DateTimeConverterBase {
 		
 		public override void WriteJson(JsonWriter writer, object value,

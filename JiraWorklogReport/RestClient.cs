@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace TogglToJiraSync {
+namespace JiraWorklogReport {
     public enum HttpVerb {
         GET,
         POST,

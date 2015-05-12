@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace TogglToJiraSync {
+namespace JiraWorklogReport {
 	public class Worklog
 	{
 		[JsonProperty(PropertyName = "key")]
@@ -10,6 +10,6 @@ namespace TogglToJiraSync {
 		public string Summary { get; set; }
 
 		[JsonProperty(PropertyName = "entries")]
-		public TimeEntry[] Entries { get; set; }
+		public JiraTimeEntry[] Entries { get; set; }
 	}
 }

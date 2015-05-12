@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.UI;
+using System.Windows.Forms;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace TogglToJiraSync {
+namespace JiraWorklogReport {
 	public class JiraConnector {
 		private const string UserName = "rvest";
 		private const string Password = "Re&99ba1-2/15";
-		private readonly JiraWorklogReport _JiraWorklogReport = new JiraWorklogReport();
+		
 
-		public void GetWorkLogs(DateTime fromDate, DateTime toDate) {
+		public List<JiraTimeEntry> GetTimeEntries(DateTime fromDate, DateTime toDate) {
 			RestClient client = new RestClient(UserName, Password);
 
 			const string dateFormat = "dd/MMM/yy";
@@ -25,66 +27,59 @@ namespace TogglToJiraSync {
 
 			string json = client.MakeRequest("");
 
-			WriteReport(JsonConvert.DeserializeObject<RootObject>(json).Worklogs);
+			return GetTimeEntries(JsonConvert.DeserializeObject<RootObject>(json).Worklogs);
 		}
 
-		private void WriteReport(Worklog[] worklogs) {
-
-			DateTime lastStartDateTime = DateTime.MinValue;
-
-			StreamWriter streamWriter = new StreamWriter("C:\\1_Development\\worklogAdp.html");
-			using (HtmlWriter htmlWriter = new HtmlWriter(streamWriter)) {
-				htmlWriter.WriteFullBeginTag("html");
-				WriteHeader(htmlWriter);
-				_JiraWorklogReport.WriteBodyTag(htmlWriter);
-				List<TimeEntry> timeEntries = GetTimeEntries(worklogs);
-				foreach (TimeEntry timeEntry in timeEntries) {
-					DateTime startedLocal = timeEntry.StartedLocal;
-					if (lastStartDateTime.Date != startedLocal.Date) {
-
-						if (lastStartDateTime != DateTime.MinValue) {
-							//if the values are the same then we haven't started a table
-							htmlWriter.WriteEndTag("table");
-							htmlWriter.WriteBreak();
-						}
-						//write new table
-						_JiraWorklogReport.WriteBeginTableTag(htmlWriter);
-
-						_JiraWorklogReport.WriteRowHtml(startedLocal, htmlWriter);
-
-					}
-
-					//Write the issue name, duration, start time and end time
-
-					_JiraWorklogReport.WriteRowHtml(timeEntry, htmlWriter);
-
-					lastStartDateTime = startedLocal; //hold onto the date, so the new table is only written when a new date is encounterd
-				}
-
-				htmlWriter.WriteEndTag("table");
-				htmlWriter.WriteEndTag("html");
-				htmlWriter.Flush();
-			}
-		}
-
-		private static void WriteHeader(HtmlWriter htmlWriter) {
-			htmlWriter.WriteFullBeginTag("head");
-			htmlWriter.WriteFullBeginTag("style");
-			htmlWriter.Write("td { padding:20px; margin:16px; }");
-			htmlWriter.WriteEndTag("style");
-			htmlWriter.WriteEndTag("head");
-		}
-
-		private List<TimeEntry> GetTimeEntries(Worklog[] worklogs) {
-			List<TimeEntry> entries = new List<TimeEntry>();
+		private List<JiraTimeEntry> GetTimeEntries(Worklog[] worklogs) {
+			List<JiraTimeEntry> entries = new List<JiraTimeEntry>();
 			foreach (Worklog worklog in worklogs) {
-				foreach (TimeEntry timeEntry in worklog.Entries) {
+				foreach (JiraTimeEntry timeEntry in worklog.Entries) {
 					timeEntry.IssueKey = worklog.Key;
 					timeEntry.KeyWithDescription = worklog.Key + ": " + worklog.Summary;
 					entries.Add(timeEntry);
 				}
 			}
 			return entries.OrderBy(e => e.StartedUTC).ToList();
+		}
+
+		public void InsertWorkLogEntry(JiraTimeEntry timeEntry) {
+			RestClient client = new RestClient(UserName, Password);
+			client.EndPoint = string.Format("https://jira.navexglobal.com/rest/api/2/issue/{0}/worklog", timeEntry.IssueKey);
+
+			string timeEntryDisplay = timeEntry.IssueKey + ": " + timeEntry.StartedLocal + " (" + timeEntry.TimeSpentDisplay + ")";
+
+			if (IsSaved(client, timeEntry)) {
+				MessageBox.Show(timeEntryDisplay, "Already Saved");
+			} else {
+				client.Method = HttpVerb.POST;
+				client.PostData = JsonConvert.SerializeObject(
+					new WorkLogEntry { timeSpent = timeEntry.TimeSpentDisplay, started = GetStartedDateTime(timeEntry.StartedLocal) });
+
+				client.MakeRequest();
+
+				MessageBox.Show(timeEntryDisplay, "Saved");
+			}
+		}
+
+		private bool IsSaved(RestClient client, JiraTimeEntry timeEntry) {
+			client.Method = HttpVerb.GET;
+			string response = client.MakeRequest();
+
+			JObject deserializeObject = (JObject)JsonConvert.DeserializeObject(response);
+			foreach (JToken worklog in deserializeObject["worklogs"]) {
+				JToken started = worklog["started"];
+				JToken timeSpent = worklog["timeSpent"];
+			
+				if (started.ToObject<DateTime>().ToString("s") == timeEntry.StartedLocal.ToString("s") && timeEntry.TimeSpentDisplay == timeSpent.ToObject<string>()) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private string GetStartedDateTime(DateTime started) {
+			string timezone = started.ToString("zzz").Replace(":", "");
+			return started.ToString("yyyy-MM-ddTHH:mm:ss.fff") + timezone;
 		}
 
 		public class HtmlWriter : HtmlTextWriter {
@@ -102,5 +97,10 @@ namespace TogglToJiraSync {
 				htmlWriter.Write(EqualsDoubleQuoteString);
 			}
 		}
+	}
+
+	public class WorkLogEntry {
+		public string timeSpent { get; set; }
+		public string started { get; set; }
 	}
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Web.UI;
 
-namespace TogglToJiraSync {
+namespace JiraWorklogReport {
 	public class JiraWorklogReport {
 		public void WriteBodyTag(JiraConnector.HtmlWriter htmlWriter) {
 			htmlWriter.WriteBeginTag("body");
@@ -31,7 +33,7 @@ namespace TogglToJiraSync {
 			htmlWriter.WriteEndTag("tr");
 		}
 
-		public void WriteRowHtml(TimeEntry timeEntry, JiraConnector.HtmlWriter htmlWriter) {
+		public void WriteRowHtml(JiraTimeEntry jiraTimeEntry, JiraConnector.HtmlWriter htmlWriter) {
 			const string dateFormat = "hh:mm tt";
 
 			htmlWriter.WriteBeginTag("tr");
@@ -42,18 +44,18 @@ namespace TogglToJiraSync {
 			htmlWriter.WriteBeginTag("td");
 			htmlWriter.WriteAttribute("width", "300");
 			WriteTextStyle(htmlWriter, "#222222", "14px");
-			htmlWriter.Write(timeEntry.KeyWithDescription);
+			htmlWriter.Write(jiraTimeEntry.KeyWithDescription);
 			htmlWriter.WriteEndTag("td");
 
 			htmlWriter.WriteBeginTag("td");
 			htmlWriter.WriteAttribute("width", "100");
 			WriteTextStyle(htmlWriter, "#222222", "14px");
-			htmlWriter.Write(timeEntry.TimeSpentDisplay);
+			htmlWriter.Write(jiraTimeEntry.TimeSpentDisplay);
 			htmlWriter.WriteEndTag("td");
 
 			htmlWriter.WriteBeginTag("td");
 			WriteTextStyle(htmlWriter, "#888888", "11px");
-			htmlWriter.Write(timeEntry.StartedLocal.ToString(dateFormat) + " - " + timeEntry.EndedLocal.ToString(dateFormat));
+			htmlWriter.Write(jiraTimeEntry.StartedLocal.ToString(dateFormat) + " - " + jiraTimeEntry.EndedLocal.ToString(dateFormat));
 			htmlWriter.WriteEndTag("td");
 
 			htmlWriter.WriteEndTag("tr");
@@ -68,6 +70,53 @@ namespace TogglToJiraSync {
 			htmlWriter.WriteStyleAttribute("padding", "5px");
 			htmlWriter.Write(HtmlTextWriter.DoubleQuoteChar);
 			htmlWriter.Write(HtmlTextWriter.TagRightChar);
+		}
+
+		public void WriteReport(List<JiraTimeEntry> timeEntries) {
+
+			DateTime lastStartDateTime = DateTime.MinValue;
+
+			StreamWriter streamWriter = new StreamWriter("C:\\1_Development\\worklogAdp.html");
+			using (JiraConnector.HtmlWriter htmlWriter = new JiraConnector.HtmlWriter(streamWriter)) {
+				htmlWriter.WriteFullBeginTag("html");
+				WriteHeader(htmlWriter);
+				WriteBodyTag(htmlWriter);
+
+				foreach (JiraTimeEntry timeEntry in timeEntries) {
+					DateTime startedLocal = timeEntry.StartedLocal;
+					if (lastStartDateTime.Date != startedLocal.Date) {
+
+						if (lastStartDateTime != DateTime.MinValue) {
+							//if the values are the same then we haven't started a table
+							htmlWriter.WriteEndTag("table");
+							htmlWriter.WriteBreak();
+						}
+						//write new table
+						WriteBeginTableTag(htmlWriter);
+
+						WriteRowHtml(startedLocal, htmlWriter);
+
+					}
+
+					//Write the issue name, duration, start time and end time
+
+					WriteRowHtml(timeEntry, htmlWriter);
+
+					lastStartDateTime = startedLocal; //hold onto the date, so the new table is only written when a new date is encounterd
+				}
+
+				htmlWriter.WriteEndTag("table");
+				htmlWriter.WriteEndTag("html");
+				htmlWriter.Flush();
+			}
+		}
+
+		private static void WriteHeader(JiraConnector.HtmlWriter htmlWriter) {
+			htmlWriter.WriteFullBeginTag("head");
+			htmlWriter.WriteFullBeginTag("style");
+			htmlWriter.Write("td { padding:20px; margin:16px; }");
+			htmlWriter.WriteEndTag("style");
+			htmlWriter.WriteEndTag("head");
 		}
 	}
 }
