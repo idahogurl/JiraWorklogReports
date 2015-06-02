@@ -1,105 +1,71 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using JiraWorklogReport.Annotations;
+using System.Globalization;
 
 namespace JiraWorklogReport {
-	public class TimeEntry : INotifyPropertyChanged {
-		private string _Description;
-		private DateTime _Ended;
-		private DateTime _Started;
-		private Stopwatch _Stopwatch;
-		private string _DurationDisplay;
-
-		public DateTime Started {
-			get { return _Started; }
+	public class TimeEntry {
+		public DateTime Started { get; set; }
+		public string StartedString { get { return Started.ToString(new CultureInfo("en-US")); }
 			set {
-				if (value == _Started) {
-					return;
+				if (!string.IsNullOrEmpty(value)) {
+					Started = DateTime.Parse(value);
 				}
-				_Started = value;
-				OnPropertyChanged();
 			}
 		}
 
-		public DateTime Ended {
-			get { return _Ended; }
-			set {
-				if (value == _Ended) {
-					return;
+		public string EndedString {
+			get {
+				if (Ended == DateTime.MinValue) {
+					return null;
 				}
-				_Ended = value;
-				OnPropertyChanged();
+				return Ended.ToString(new CultureInfo("en-US"));
+			}
+			set {
+				if (!string.IsNullOrEmpty(value)) {
+					Ended = DateTime.Parse(value);
+				}
 			}
 		}
 
-		public string Description {
-			get { return _Description; }
-			set {
-				if (value == _Description) {
-					return;
-				}
-				_Description = value;
-				OnPropertyChanged();
-			}
-		}
-
-		public string DurationDisplay {
-			get { return _DurationDisplay; }
-			set {
-				if (value == _DurationDisplay) {
-					return;
-				}
-				_DurationDisplay = value;
-				OnPropertyChanged();
-			}
-		}
-
+		public DateTime Ended { get; set; }
+		public string Description { get; set; }
+		public string DurationDisplay { get; set; }
 		public int Duration { get; set; }
 
-		public string IssueKey => Description.Split(':')[0];
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-
-		private void StartTimer() {
-			_Stopwatch = new Stopwatch();
-			_Stopwatch.Start();
-
-			Started = DateTime.Now;
-		}
-
-		private void StopTimer() {
-			Ended = DateTime.Now;
-			if (_Stopwatch == null) {
-				TimeSpan timeSpan = Ended.Subtract(Started);
-				Duration = (int) timeSpan.TotalSeconds;
-				DurationDisplay = JiraTimeEntry.GetTimeSpentDisplay(timeSpan);
-			} else {
-				_Stopwatch.Stop();
-				Duration = (int) _Stopwatch.Elapsed.TotalSeconds; //Create an entry
-				DurationDisplay = JiraTimeEntry.GetTimeSpentDisplay(_Stopwatch.Elapsed);
-
-				_Stopwatch = null;
+		public string IssueKey {
+			get {
+				if (string.IsNullOrEmpty(Description)) {
+					return null;
+				}
+				return Description.Split(':')[0];
 			}
 		}
 
-		public bool StartOrStopTimer() {
-			if(Started == DateTime.MinValue) {
-				StartTimer();
+		private void Start(DateTime startedDateTime) {
+			Started = startedDateTime;
+		}
+
+		private void Stop() {
+			Ended = DateTime.Now;
+			SetDuration();
+		}
+
+		public bool StartOrStop(DateTime startedDateTime) {
+			if (Started == DateTime.MinValue) {
+				Start(startedDateTime);
 				return true;
 			}
 
 			if (Duration == 0) {
-				StopTimer();
+				Stop();
 				return true;
 			}
 			return false;
+		}
+
+		public void SetDuration() {
+			TimeSpan timeSpan = Ended.Subtract(Started);
+			Duration = (int) timeSpan.TotalSeconds;
+			DurationDisplay = JiraTimeEntry.GetTimeSpentDisplay(timeSpan);
 		}
 	}
 }

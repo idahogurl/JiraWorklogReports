@@ -33,6 +33,7 @@ namespace JiraWorklogReport {
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.DateTimePicker_TimeEntriesDate = new System.Windows.Forms.DateTimePicker();
 			this.button1 = new System.Windows.Forms.Button();
 			this.Button_Save_To_Jira = new System.Windows.Forms.Button();
 			this.DataGridView_TimeEntries = new System.Windows.Forms.DataGridView();
@@ -42,6 +43,7 @@ namespace JiraWorklogReport {
 			this.Ended = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
+			this.Label_Focus = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DataGridView_TimeEntries)).BeginInit();
@@ -123,6 +125,8 @@ namespace JiraWorklogReport {
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.Label_Focus);
+			this.groupBox2.Controls.Add(this.DateTimePicker_TimeEntriesDate);
 			this.groupBox2.Controls.Add(this.button1);
 			this.groupBox2.Controls.Add(this.Button_Save_To_Jira);
 			this.groupBox2.Controls.Add(this.DataGridView_TimeEntries);
@@ -132,6 +136,14 @@ namespace JiraWorklogReport {
 			this.groupBox2.TabIndex = 11;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Time Entries";
+			// 
+			// DateTimePicker_TimeEntriesDate
+			// 
+			this.DateTimePicker_TimeEntriesDate.Location = new System.Drawing.Point(99, 19);
+			this.DateTimePicker_TimeEntriesDate.Name = "DateTimePicker_TimeEntriesDate";
+			this.DateTimePicker_TimeEntriesDate.Size = new System.Drawing.Size(238, 22);
+			this.DateTimePicker_TimeEntriesDate.TabIndex = 14;
+			this.DateTimePicker_TimeEntriesDate.ValueChanged += new System.EventHandler(this.DateTimePicker_TimeEntriesDate_ValueChanged);
 			// 
 			// button1
 			// 
@@ -174,12 +186,11 @@ namespace JiraWorklogReport {
 			// 
 			// Button_StartStop
 			// 
-			this.Button_StartStop.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+			this.Button_StartStop.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
 			this.Button_StartStop.HeaderText = "";
 			this.Button_StartStop.Name = "Button_StartStop";
 			this.Button_StartStop.Text = "Start/Stop";
 			this.Button_StartStop.UseColumnTextForButtonValue = true;
-			this.Button_StartStop.Width = 5;
 			// 
 			// Description
 			// 
@@ -192,20 +203,18 @@ namespace JiraWorklogReport {
 			// Started
 			// 
 			this.Started.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.Started.DataPropertyName = "Started";
+			this.Started.DataPropertyName = "StartedString";
 			this.Started.HeaderText = "Started";
 			this.Started.Name = "Started";
-			this.Started.ReadOnly = true;
 			this.Started.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			this.Started.Width = 57;
 			// 
 			// Ended
 			// 
 			this.Ended.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-			this.Ended.DataPropertyName = "Ended";
+			this.Ended.DataPropertyName = "EndedString";
 			this.Ended.HeaderText = "Ended";
 			this.Ended.Name = "Ended";
-			this.Ended.ReadOnly = true;
 			this.Ended.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			this.Ended.Width = 54;
 			// 
@@ -221,12 +230,18 @@ namespace JiraWorklogReport {
 			// 
 			// Delete
 			// 
-			this.Delete.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
 			this.Delete.HeaderText = "";
 			this.Delete.Name = "Delete";
 			this.Delete.Text = "Delete";
 			this.Delete.UseColumnTextForButtonValue = true;
-			this.Delete.Width = 5;
+			// 
+			// Label_Focus
+			// 
+			this.Label_Focus.AutoSize = true;
+			this.Label_Focus.Location = new System.Drawing.Point(344, 18);
+			this.Label_Focus.Name = "Label_Focus";
+			this.Label_Focus.Size = new System.Drawing.Size(0, 16);
+			this.Label_Focus.TabIndex = 15;
 			// 
 			// Form1
 			// 
@@ -243,6 +258,7 @@ namespace JiraWorklogReport {
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DataGridView_TimeEntries)).EndInit();
 			this.ResumeLayout(false);
 
@@ -261,12 +277,14 @@ namespace JiraWorklogReport {
 		private System.Windows.Forms.DataGridView DataGridView_TimeEntries;
 		private System.Windows.Forms.Button Button_Save_To_Jira;
 		private System.Windows.Forms.Button button1;
+		private DateTimePicker DateTimePicker_TimeEntriesDate;
 		private DataGridViewButtonColumn Button_StartStop;
 		private DataGridViewTextBoxColumn Description;
 		private DataGridViewTextBoxColumn Started;
 		private DataGridViewTextBoxColumn Ended;
 		private DataGridViewTextBoxColumn Duration;
 		private DataGridViewButtonColumn Delete;
+		private Label Label_Focus;
 	}
 }
 

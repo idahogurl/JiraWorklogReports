@@ -108,6 +108,7 @@ namespace JiraWorklogReport {
 				htmlWriter.WriteEndTag("table");
 				htmlWriter.WriteEndTag("html");
 				htmlWriter.Flush();
+				htmlWriter.Close();
 			}
 		}
 

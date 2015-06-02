@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 
@@ -11,36 +9,46 @@ namespace JiraWorklogReport {
 		public Form1() {
 			InitializeComponent();
 
-			TimeEntries = GetTimeEntries(GetDataFileName());
+			TimeEntries = GetTimeEntries(GetDataFileName(DateTime.Now.Date));
 
 			DataGridView_TimeEntries.AutoGenerateColumns = false;
 			DataGridView_TimeEntries.DataSource = TimeEntries;
-			DataGridView_TimeEntries.CellValueChanged += DataGridView_TimeEntriesOnCellValueChanged;
+			DataGridView_TimeEntries.CellEndEdit += DataGridView_TimeEntriesOnCellEndEdit;
+			Label_Focus.GotFocus += Label_FocusOnGotFocus;
 		}
-		
-		public int CurrentRowIndex { get; set; }
-		public BindingSource TimeEntries { get; set; }
 
-		private void DataGridView_TimeEntriesOnCellValueChanged(object sender, DataGridViewCellEventArgs cellEventArgs) {
-			if (cellEventArgs.ColumnIndex == 1) {
-				string description = DataGridView_TimeEntries[cellEventArgs.ColumnIndex, cellEventArgs.RowIndex].Value.ToString();
-				TimeEntry timeEntry = GetTimeEntry(cellEventArgs.RowIndex);
-				timeEntry.Description = description;
+		private void Label_FocusOnGotFocus(object sender, EventArgs eventArgs) {
+			for (int rowIndex = 0; rowIndex < DataGridView_TimeEntries.Rows.Count; rowIndex++) {
+				DataGridViewRow row = DataGridView_TimeEntries.Rows[rowIndex];
+				TimeEntry timeEntry = GetTimeEntry(rowIndex);
+				timeEntry.Description = row.Cells[1].Value.ToString();
+				timeEntry.StartedString = row.Cells[2].Value.ToString();
+				timeEntry.EndedString = row.Cells[3].Value.ToString();
+
+				if (string.IsNullOrEmpty(timeEntry.EndedString)) {
+					timeEntry.Duration = 0;
+				} else {
+					timeEntry.SetDuration();
+				}
 			}
-
 			UpdateTimeEntries();
 		}
 
-		private string GetDataFileName() {
-			return "C:\\1_Development\\Projects\\JiraWorklogReport\\TimeEntries\\" + DateTime.UtcNow.Date.ToString("yyyy_MM_dd") + ".txt";
+		public int CurrentRowIndex { get; set; }
+		public BindingSource TimeEntries { get; set; }
+
+		private void DataGridView_TimeEntriesOnCellEndEdit(object sender, DataGridViewCellEventArgs cellEventArgs) {
+			Label_Focus.Focus();
+		}
+
+		private string GetDataFileName(DateTime dateTime) {
+			return "C:\\1_Development\\Projects\\JiraWorklogReport\\TimeEntries\\" + dateTime.ToString("yyyy_MM_dd") + ".txt";
 		}
 
 		private BindingSource GetTimeEntries(string dataFile) {
 			BindingSource bindingSource = new BindingSource();
 			//Check if file exists
 			if (!File.Exists(dataFile)) {
-				File.Create(dataFile);
-
 				bindingSource.DataSource = new BindingList<TimeEntry>();
 			} else {
 				bindingSource.DataSource = JsonConvert.DeserializeObject<BindingList<TimeEntry>>(File.ReadAllText(dataFile));
@@ -57,7 +65,7 @@ namespace JiraWorklogReport {
 
 		private void Button_SaveToJira_Click(object sender, EventArgs e) {
 			JiraConnector jiraConnector = new JiraConnector();
-			TimeEntries = GetTimeEntries(GetDataFileName());
+			TimeEntries = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value.Date));
 			
 			foreach (TimeEntry timeEntry in TimeEntries) {
 				jiraConnector.InsertWorkLogEntry(ConvertToJiraTimeEntry(timeEntry));
@@ -74,23 +82,26 @@ namespace JiraWorklogReport {
 			}
 
 			TimeEntry timeEntry = GetTimeEntry(e.RowIndex);
-			if (timeEntry == null ) {
+			if (timeEntry == null) {
 				return;
 			}
 
-			if (e.ColumnIndex == 0 && !string.IsNullOrEmpty(timeEntry.Description)) {
-				CurrentRowIndex = e.RowIndex;
-				if (timeEntry.StartOrStopTimer()) UpdateTimeEntries();
+			if (e.ColumnIndex == 0) {
+				if (timeEntry.StartOrStop(DateTime.Now)) {
+					UpdateTimeEntries();
+				}
 			}
 
 			if (e.ColumnIndex == 5) {
 				TimeEntries.List.Remove(timeEntry);
+				DataGridView_TimeEntries.DataSource = TimeEntries;
 				UpdateTimeEntries();
 			}
 		}
 
 		private void UpdateTimeEntries() {
-			File.WriteAllText(GetDataFileName(), JsonConvert.SerializeObject(TimeEntries.List));
+			File.WriteAllText(GetDataFileName(DateTimePicker_TimeEntriesDate.Value.Date), JsonConvert.SerializeObject(TimeEntries.List));
+			DataGridView_TimeEntries.DataSource = TimeEntries;
 		}
 
 		private TimeEntry GetTimeEntry(int rowIndex) {
@@ -102,11 +113,21 @@ namespace JiraWorklogReport {
 
 		private void Button_AddEntry_Click(object sender, EventArgs e) {
 			TimeEntry timeEntry = GetTimeEntry(DataGridView_TimeEntries.Rows.Count - 1);
-			if (timeEntry != null) {
-				timeEntry.StartOrStopTimer();
-			}
+			DateTime startedDateTime = DateTimePicker_TimeEntriesDate.Value;
 			
-			TimeEntries.Add(new TimeEntry());
+			if (timeEntry != null) {
+				timeEntry.StartOrStop(startedDateTime);
+			}
+
+			DateTime now = DateTime.Now;
+			DateTime started = new DateTime(startedDateTime.Year, startedDateTime.Month, startedDateTime.Day, now.Hour, now.Minute, now.Second);
+			TimeEntries.Add(new TimeEntry() { Started =  started} );
+
+			UpdateTimeEntries();
 		}
+
+		private void DateTimePicker_TimeEntriesDate_ValueChanged(object sender, EventArgs e) {
+			DataGridView_TimeEntries.DataSource = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value.Date));
+        }
 	}
 }
