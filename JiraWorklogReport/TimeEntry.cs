@@ -1,12 +1,54 @@
 ﻿using System;
-using System.Globalization;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using JiraWorklogReport.Annotations;
 
 namespace JiraWorklogReport {
-	public class TimeEntry {
-		public DateTime Started { get; set; }
-		public string StartedString { get { return Started.ToString(new CultureInfo("en-US")); }
+	public class TimeEntry : INotifyPropertyChanged {
+		private string _Description;
+		private TimeSpan _Duration;
+		private string _DurationDisplay;
+		private DateTime _Ended;
+		private DateTime _Started;
+		private Stopwatch _Stopwatch;
+
+		public DateTime Started {
+			get { return _Started; }
 			set {
-				if (!string.IsNullOrEmpty(value)) {
+				if (value == _Started) {
+					return;
+				}
+				_Started = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public DateTime Ended {
+			get { return _Ended; }
+			set {
+				if (value == _Ended) {
+					return;
+				}
+				_Ended = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string StartedString {
+			get {
+				if (Started == DateTime.MinValue) {
+					return null;
+				}
+				return Started.ToShortDateString() + " " + Started.ToShortTimeString();
+			}
+
+			set {
+				if (string.IsNullOrWhiteSpace(value)) {
+					Started = DateTime.MinValue;
+					Ended = DateTime.MinValue;
+					Duration = new TimeSpan();
+				} else {
 					Started = DateTime.Parse(value);
 				}
 			}
@@ -17,55 +59,74 @@ namespace JiraWorklogReport {
 				if (Ended == DateTime.MinValue) {
 					return null;
 				}
-				return Ended.ToString(new CultureInfo("en-US"));
+				return Ended.ToShortDateString() + " " + Ended.ToShortTimeString();
 			}
 			set {
-				if (!string.IsNullOrEmpty(value)) {
+				if (string.IsNullOrWhiteSpace(value)) {
+					Ended = DateTime.MinValue;
+					Duration = new TimeSpan();
+				} else {
 					Ended = DateTime.Parse(value);
+					Duration = GetDurationTimeSpan(Started, Ended);
 				}
 			}
 		}
 
-		public DateTime Ended { get; set; }
-		public string Description { get; set; }
-		public string DurationDisplay { get; set; }
-		public int Duration { get; set; }
+		public string Description {
+			get { return _Description; }
+			set {
+				if (value == _Description) {
+					return;
+				}
+				_Description = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string DurationDisplay {
+			get {
+				return JiraTimeEntry.GetTimeSpentDisplay(Duration);
+			}
+		}
+
+		public TimeSpan Duration {
+			get { return _Duration; }
+			set {
+				if (value == Duration) {
+					return;
+				}
+				_Duration = value;
+				OnPropertyChanged();
+				_Duration = value;
+			}
+		}
 
 		public string IssueKey {
 			get {
-				if (string.IsNullOrEmpty(Description)) {
-					return null;
+				if (Description != null) {
+					return Description.Split(':')[0];
 				}
-				return Description.Split(':')[0];
+				return null;
 			}
 		}
 
-		private void Start(DateTime startedDateTime) {
-			Started = startedDateTime;
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		private void Stop() {
+		public void Stop() {
 			Ended = DateTime.Now;
-			SetDuration();
+			Duration = GetDurationTimeSpan(Started, Ended);
 		}
 
-		public bool StartOrStop(DateTime startedDateTime) {
-			if (Started == DateTime.MinValue) {
-				Start(startedDateTime);
-				return true;
+		public static TimeSpan GetDurationTimeSpan(DateTime startDateTime, DateTime endDateTime) {
+			if (startDateTime == DateTime.MinValue || endDateTime == DateTime.MinValue) {
+				return new TimeSpan();
 			}
-
-			if (Duration == 0) {
-				Stop();
-				return true;
-			}
-			return false;
-		}
-
-		public void SetDuration() {
-			TimeSpan timeSpan = Ended.Subtract(Started);
-			Duration = (int) timeSpan.TotalSeconds;
-			DurationDisplay = JiraTimeEntry.GetTimeSpentDisplay(timeSpan);
+			return endDateTime.Subtract(startDateTime);
 		}
 	}
 }

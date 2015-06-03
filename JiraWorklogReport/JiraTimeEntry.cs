@@ -52,6 +52,9 @@ namespace JiraWorklogReport {
 		}
 
 		internal static string GetTimeSpentDisplay(TimeSpan timeSpentTimeSpan) {
+			if (timeSpentTimeSpan.Ticks == 0) {
+				return null;
+			}
 			if (timeSpentTimeSpan.Hours == 0) {
 				return timeSpentTimeSpan.Minutes + "m";
 			}

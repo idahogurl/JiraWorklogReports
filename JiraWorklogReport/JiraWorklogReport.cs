@@ -76,7 +76,7 @@ namespace JiraWorklogReport {
 
 			DateTime lastStartDateTime = DateTime.MinValue;
 
-			StreamWriter streamWriter = new StreamWriter("C:\\1_Development\\worklogAdp.html");
+			StreamWriter streamWriter = new StreamWriter("C:\\1_Development\\Projects\\JiraWorklogReport\\worklogAdp.html");
 			using (JiraConnector.HtmlWriter htmlWriter = new JiraConnector.HtmlWriter(streamWriter)) {
 				htmlWriter.WriteFullBeginTag("html");
 				WriteHeader(htmlWriter);

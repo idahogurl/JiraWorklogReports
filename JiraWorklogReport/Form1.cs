@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
+using JiraWorklogReport.Properties;
 using Newtonsoft.Json;
 
 namespace JiraWorklogReport {
@@ -9,36 +10,97 @@ namespace JiraWorklogReport {
 		public Form1() {
 			InitializeComponent();
 
-			TimeEntries = GetTimeEntries(GetDataFileName(DateTime.Now.Date));
+			TimeEntries = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));
 
 			DataGridView_TimeEntries.AutoGenerateColumns = false;
 			DataGridView_TimeEntries.DataSource = TimeEntries;
-			DataGridView_TimeEntries.CellEndEdit += DataGridView_TimeEntriesOnCellEndEdit;
-			Label_Focus.GotFocus += Label_FocusOnGotFocus;
+			DataGridView_TimeEntries.CellContentClick += DataGridView_TimeEntriesOnCellContentClick;
+			DataGridView_TimeEntries.CellValueChanged += DataGridView_TimeEntriesOnCellValueChanged;
+
+			Button_StartStop.Text = GetButtonStartStopText();
 		}
 
-		private void Label_FocusOnGotFocus(object sender, EventArgs eventArgs) {
-			for (int rowIndex = 0; rowIndex < DataGridView_TimeEntries.Rows.Count; rowIndex++) {
-				DataGridViewRow row = DataGridView_TimeEntries.Rows[rowIndex];
-				TimeEntry timeEntry = GetTimeEntry(rowIndex);
-				timeEntry.Description = row.Cells[1].Value.ToString();
-				timeEntry.StartedString = row.Cells[2].Value.ToString();
-				timeEntry.EndedString = row.Cells[3].Value.ToString();
-
-				if (string.IsNullOrEmpty(timeEntry.EndedString)) {
-					timeEntry.Duration = 0;
-				} else {
-					timeEntry.SetDuration();
-				}
-			}
-			UpdateTimeEntries();
-		}
-
+		private int LastGridViewRowIndex => DataGridView_TimeEntries.Rows.GetLastRow(DataGridViewElementStates.None);
 		public int CurrentRowIndex { get; set; }
 		public BindingSource TimeEntries { get; set; }
 
-		private void DataGridView_TimeEntriesOnCellEndEdit(object sender, DataGridViewCellEventArgs cellEventArgs) {
-			Label_Focus.Focus();
+		private string GetButtonStartStopText() {
+			TimeEntry timeEntry = GetTimeEntry(LastGridViewRowIndex);
+			if (timeEntry != null && timeEntry.Started == DateTime.MinValue) {
+				return Resources.Start;
+			}
+			if (timeEntry != null && timeEntry.Ended == DateTime.MinValue) {
+				return Resources.Stop;
+			}
+			return Resources.Start;
+		}
+
+		private void DataGridView_TimeEntriesOnCellContentClick(object sender, DataGridViewCellEventArgs eventArgs) {
+			string columnName = DataGridView_TimeEntries.Columns[eventArgs.ColumnIndex].Name;
+			if (columnName == "Delete") {
+				TimeEntry timeEntry = GetTimeEntry(eventArgs.RowIndex);
+				if (timeEntry == null) {
+					return;
+				}
+				TimeEntries.Remove(timeEntry);
+				WriteDataFile();
+				Button_StartStop.Text = GetButtonStartStopText();
+			}
+		}
+
+		private void DataGridView_TimeEntriesOnCellValueChanged(object sender, DataGridViewCellEventArgs cellEventArgs) {
+			if (DataGridView_TimeEntries.Columns[cellEventArgs.ColumnIndex].Name  == "Description") {
+				
+				TimeEntry timeEntry = GetTimeEntry(cellEventArgs.RowIndex);
+				timeEntry.Description = DataGridView_TimeEntries.CurrentCell.Value.ToString();
+				WriteDataFile();
+			}
+
+			if (DataGridView_TimeEntries.Columns[cellEventArgs.ColumnIndex].Name  == "Started") {
+				
+				TimeEntry timeEntry = GetTimeEntry(cellEventArgs.RowIndex);
+
+				if (DataGridView_TimeEntries.CurrentCell.Value == null) {
+					timeEntry.StartedString = null;
+					timeEntry.EndedString = null;
+					Button_StartStop.Text = GetButtonStartStopText();
+				} else {
+					timeEntry.StartedString = DataGridView_TimeEntries.CurrentCell.Value.ToString();
+				}
+
+				//Currently the Started cell is in edit mode. Need to make Duration in edit mode to modify its value programmatically.
+				BeginEdit("Duration");
+				timeEntry.Duration = TimeEntry.GetDurationTimeSpan(timeEntry.Started, timeEntry.Ended);
+				EndEdit();
+			}
+
+			if (DataGridView_TimeEntries.Columns[cellEventArgs.ColumnIndex].Name  == "Ended") {
+				TimeEntry timeEntry = GetTimeEntry(cellEventArgs.RowIndex);
+				if (DataGridView_TimeEntries.CurrentCell.Value == null) {
+					timeEntry.EndedString = null;
+					Button_StartStop.Text = GetButtonStartStopText();
+				} else {
+					timeEntry.EndedString = DataGridView_TimeEntries.CurrentCell.Value.ToString();
+				}
+
+				//Currently the Started cell is in edit mode. Need to make Duration in edit mode to modify its value programmatically.
+				BeginEdit("Duration");
+				timeEntry.Duration = TimeEntry.GetDurationTimeSpan(timeEntry.Started, timeEntry.Ended);
+				EndEdit();
+			}
+			
+		}
+
+		private void BeginEdit(string columnName) {
+			DataGridView_TimeEntries.CurrentCell = DataGridView_TimeEntries.Rows[LastGridViewRowIndex].Cells[columnName];
+			DataGridView_TimeEntries.BeginEdit(true);
+		}
+
+		private void EndEdit() {
+			DataGridView_TimeEntries.EndEdit();
+			WriteDataFile();
+
+			TimeEntries.ResetBindings(false);
 		}
 
 		private string GetDataFileName(DateTime dateTime) {
@@ -49,6 +111,8 @@ namespace JiraWorklogReport {
 			BindingSource bindingSource = new BindingSource();
 			//Check if file exists
 			if (!File.Exists(dataFile)) {
+				File.Create(dataFile);
+
 				bindingSource.DataSource = new BindingList<TimeEntry>();
 			} else {
 				bindingSource.DataSource = JsonConvert.DeserializeObject<BindingList<TimeEntry>>(File.ReadAllText(dataFile));
@@ -65,43 +129,23 @@ namespace JiraWorklogReport {
 
 		private void Button_SaveToJira_Click(object sender, EventArgs e) {
 			JiraConnector jiraConnector = new JiraConnector();
-			TimeEntries = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value.Date));
-			
+			TimeEntries = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));
+
 			foreach (TimeEntry timeEntry in TimeEntries) {
 				jiraConnector.InsertWorkLogEntry(ConvertToJiraTimeEntry(timeEntry));
 			}
 		}
 
 		private JiraTimeEntry ConvertToJiraTimeEntry(TimeEntry timeEntry) {
-			return new JiraTimeEntry {IssueKey = timeEntry.IssueKey, StartedUTC = timeEntry.Started.ToUniversalTime(), TimeSpent = timeEntry.Duration};
-		}
-		
-		private void GridView_TimeEntries_Click(object sender, DataGridViewCellEventArgs e) {
-			if (e.ColumnIndex != 0 && e.ColumnIndex != 5) { //0 is Start/Stop button, 5 is Delete button
-				return;
-			}
-
-			TimeEntry timeEntry = GetTimeEntry(e.RowIndex);
-			if (timeEntry == null) {
-				return;
-			}
-
-			if (e.ColumnIndex == 0) {
-				if (timeEntry.StartOrStop(DateTime.Now)) {
-					UpdateTimeEntries();
-				}
-			}
-
-			if (e.ColumnIndex == 5) {
-				TimeEntries.List.Remove(timeEntry);
-				DataGridView_TimeEntries.DataSource = TimeEntries;
-				UpdateTimeEntries();
-			}
+			return new JiraTimeEntry {
+				IssueKey = timeEntry.IssueKey,
+				StartedUTC = timeEntry.Started.ToUniversalTime(),
+				TimeSpent = (int) timeEntry.Duration.TotalSeconds
+			};
 		}
 
-		private void UpdateTimeEntries() {
-			File.WriteAllText(GetDataFileName(DateTimePicker_TimeEntriesDate.Value.Date), JsonConvert.SerializeObject(TimeEntries.List));
-			DataGridView_TimeEntries.DataSource = TimeEntries;
+		private void WriteDataFile() {
+			File.WriteAllText(GetDataFileName(DateTimePicker_TimeEntriesDate.Value), JsonConvert.SerializeObject(TimeEntries.List));
 		}
 
 		private TimeEntry GetTimeEntry(int rowIndex) {
@@ -112,22 +156,36 @@ namespace JiraWorklogReport {
 		}
 
 		private void Button_AddEntry_Click(object sender, EventArgs e) {
-			TimeEntry timeEntry = GetTimeEntry(DataGridView_TimeEntries.Rows.Count - 1);
-			DateTime startedDateTime = DateTimePicker_TimeEntriesDate.Value;
-			
+			TimeEntry timeEntry = GetTimeEntry(LastGridViewRowIndex);
+
+			//Stop the previous time entry
 			if (timeEntry != null) {
-				timeEntry.StartOrStop(startedDateTime);
+				timeEntry.Stop();
 			}
 
-			DateTime now = DateTime.Now;
-			DateTime started = new DateTime(startedDateTime.Year, startedDateTime.Month, startedDateTime.Day, now.Hour, now.Minute, now.Second);
-			TimeEntries.Add(new TimeEntry() { Started =  started} );
+			TimeEntries.Add(new TimeEntry());
+			WriteDataFile();
+		}
 
-			UpdateTimeEntries();
+		private void Button_StartStop_Click(object sender, EventArgs e) {
+			//Place the Started cell into Edit Mode
+			BeginEdit("Started");
+			
+			TimeEntry timeEntry = GetTimeEntry(LastGridViewRowIndex);
+			if (timeEntry.Started == DateTime.MinValue) {
+				timeEntry.Started = DateTimePicker_TimeEntriesDate.Value;
+				Button_StartStop.Text = Resources.Stop;
+			} else {
+				timeEntry.Stop();
+				Button_StartStop.Text = Resources.Start;
+			}
+			EndEdit();
 		}
 
 		private void DateTimePicker_TimeEntriesDate_ValueChanged(object sender, EventArgs e) {
-			DataGridView_TimeEntries.DataSource = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value.Date));
-        }
+			TimeEntries.DataSource = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));
+			TimeEntries.ResetBindings(false);
+			Button_StartStop.Text = GetButtonStartStopText();
+		}
 	}
 }
