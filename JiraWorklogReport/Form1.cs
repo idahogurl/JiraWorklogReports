@@ -6,8 +6,8 @@ using JiraWorklogReport.Properties;
 using Newtonsoft.Json;
 
 namespace JiraWorklogReport {
-	public partial class Form1 : Form {
-		public Form1() {
+	public partial class Form_Main : Form {
+		public Form_Main() {
 			InitializeComponent();
 
 			TimeEntries = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));

@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 
 namespace JiraWorklogReport {
-	partial class Form1 {
+	partial class Form_Main {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -25,165 +25,105 @@ namespace JiraWorklogReport {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.Button_GetEntries = new System.Windows.Forms.Button();
-			this.DateTimePicker_StartDate = new System.Windows.Forms.DateTimePicker();
-			this.DateTimePicker_EndDate = new System.Windows.Forms.DateTimePicker();
-			this.Button_SaveToJira = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.TabControl_TimeEntries = new System.Windows.Forms.TabControl();
+			this.TabPage_TimeEntries = new System.Windows.Forms.TabPage();
+			this.Label_DateFilter = new System.Windows.Forms.Label();
 			this.Button_StartStop = new System.Windows.Forms.Button();
-			this.Label_Focus = new System.Windows.Forms.Label();
 			this.DateTimePicker_TimeEntriesDate = new System.Windows.Forms.DateTimePicker();
-			this.button1 = new System.Windows.Forms.Button();
-			this.Button_Save_To_Jira = new System.Windows.Forms.Button();
+			this.Button_AddEntry = new System.Windows.Forms.Button();
+			this.Button_SaveToJira = new System.Windows.Forms.Button();
 			this.DataGridView_TimeEntries = new System.Windows.Forms.DataGridView();
 			this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Started = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Ended = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
-			this.groupBox1.SuspendLayout();
-			this.groupBox2.SuspendLayout();
+			this.TabPage_Report = new System.Windows.Forms.TabPage();
+			this.label1 = new System.Windows.Forms.Label();
+			this.DateTimePicker_StartDate = new System.Windows.Forms.DateTimePicker();
+			this.label2 = new System.Windows.Forms.Label();
+			this.DateTimePicker_EndDate = new System.Windows.Forms.DateTimePicker();
+			this.Button_CreateReport = new System.Windows.Forms.Button();
+			this.label3 = new System.Windows.Forms.Label();
+			this.TabControl_TimeEntries.SuspendLayout();
+			this.TabPage_TimeEntries.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DataGridView_TimeEntries)).BeginInit();
+			this.TabPage_Report.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// Button_GetEntries
+			// TabControl_TimeEntries
 			// 
-			this.Button_GetEntries.Location = new System.Drawing.Point(150, 86);
-			this.Button_GetEntries.Margin = new System.Windows.Forms.Padding(4);
-			this.Button_GetEntries.Name = "Button_GetEntries";
-			this.Button_GetEntries.Size = new System.Drawing.Size(127, 28);
-			this.Button_GetEntries.TabIndex = 0;
-			this.Button_GetEntries.Text = "Create Report";
-			this.Button_GetEntries.UseVisualStyleBackColor = true;
-			this.Button_GetEntries.Click += new System.EventHandler(this.Button_CreateReport_Click);
+			this.TabControl_TimeEntries.Controls.Add(this.TabPage_TimeEntries);
+			this.TabControl_TimeEntries.Controls.Add(this.TabPage_Report);
+			this.TabControl_TimeEntries.Location = new System.Drawing.Point(19, 12);
+			this.TabControl_TimeEntries.Name = "TabControl_TimeEntries";
+			this.TabControl_TimeEntries.SelectedIndex = 0;
+			this.TabControl_TimeEntries.Size = new System.Drawing.Size(693, 337);
+			this.TabControl_TimeEntries.TabIndex = 12;
 			// 
-			// DateTimePicker_StartDate
+			// TabPage_TimeEntries
 			// 
-			this.DateTimePicker_StartDate.Location = new System.Drawing.Point(87, 22);
-			this.DateTimePicker_StartDate.Margin = new System.Windows.Forms.Padding(4);
-			this.DateTimePicker_StartDate.Name = "DateTimePicker_StartDate";
-			this.DateTimePicker_StartDate.Size = new System.Drawing.Size(265, 22);
-			this.DateTimePicker_StartDate.TabIndex = 1;
+			this.TabPage_TimeEntries.Controls.Add(this.Label_DateFilter);
+			this.TabPage_TimeEntries.Controls.Add(this.Button_StartStop);
+			this.TabPage_TimeEntries.Controls.Add(this.DateTimePicker_TimeEntriesDate);
+			this.TabPage_TimeEntries.Controls.Add(this.Button_AddEntry);
+			this.TabPage_TimeEntries.Controls.Add(this.Button_SaveToJira);
+			this.TabPage_TimeEntries.Controls.Add(this.DataGridView_TimeEntries);
+			this.TabPage_TimeEntries.Location = new System.Drawing.Point(4, 25);
+			this.TabPage_TimeEntries.Name = "TabPage_TimeEntries";
+			this.TabPage_TimeEntries.Padding = new System.Windows.Forms.Padding(3);
+			this.TabPage_TimeEntries.Size = new System.Drawing.Size(685, 308);
+			this.TabPage_TimeEntries.TabIndex = 0;
+			this.TabPage_TimeEntries.Text = "Time Entries";
+			this.TabPage_TimeEntries.UseVisualStyleBackColor = true;
 			// 
-			// DateTimePicker_EndDate
+			// Label_DateFilter
 			// 
-			this.DateTimePicker_EndDate.Location = new System.Drawing.Point(87, 54);
-			this.DateTimePicker_EndDate.Margin = new System.Windows.Forms.Padding(4);
-			this.DateTimePicker_EndDate.Name = "DateTimePicker_EndDate";
-			this.DateTimePicker_EndDate.Size = new System.Drawing.Size(265, 22);
-			this.DateTimePicker_EndDate.TabIndex = 2;
-			// 
-			// Button_SaveToJira
-			// 
-			this.Button_SaveToJira.Location = new System.Drawing.Point(19, 232);
-			this.Button_SaveToJira.Margin = new System.Windows.Forms.Padding(4);
-			this.Button_SaveToJira.Name = "Button_SaveToJira";
-			this.Button_SaveToJira.Size = new System.Drawing.Size(100, 28);
-			this.Button_SaveToJira.TabIndex = 4;
-			this.Button_SaveToJira.Text = "Save to Jira";
-			this.Button_SaveToJira.UseVisualStyleBackColor = true;
-			this.Button_SaveToJira.Click += new System.EventHandler(this.Button_SaveToJira_Click);
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(15, 26);
-			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(35, 16);
-			this.label1.TabIndex = 5;
-			this.label1.Text = "Start";
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(15, 54);
-			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(32, 16);
-			this.label2.TabIndex = 6;
-			this.label2.Text = "End";
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Controls.Add(this.DateTimePicker_StartDate);
-			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Controls.Add(this.DateTimePicker_EndDate);
-			this.groupBox1.Controls.Add(this.Button_GetEntries);
-			this.groupBox1.Location = new System.Drawing.Point(20, 10);
-			this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-			this.groupBox1.Size = new System.Drawing.Size(428, 120);
-			this.groupBox1.TabIndex = 9;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Report Date Range";
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.Button_StartStop);
-			this.groupBox2.Controls.Add(this.Label_Focus);
-			this.groupBox2.Controls.Add(this.DateTimePicker_TimeEntriesDate);
-			this.groupBox2.Controls.Add(this.button1);
-			this.groupBox2.Controls.Add(this.Button_Save_To_Jira);
-			this.groupBox2.Controls.Add(this.DataGridView_TimeEntries);
-			this.groupBox2.Location = new System.Drawing.Point(20, 169);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(818, 268);
-			this.groupBox2.TabIndex = 11;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Time Entries";
+			this.Label_DateFilter.AutoSize = true;
+			this.Label_DateFilter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Label_DateFilter.Location = new System.Drawing.Point(18, 11);
+			this.Label_DateFilter.Name = "Label_DateFilter";
+			this.Label_DateFilter.Size = new System.Drawing.Size(154, 16);
+			this.Label_DateFilter.TabIndex = 22;
+			this.Label_DateFilter.Text = "View Time Entries for";
 			// 
 			// Button_StartStop
 			// 
-			this.Button_StartStop.Location = new System.Drawing.Point(353, 19);
+			this.Button_StartStop.Location = new System.Drawing.Point(102, 42);
 			this.Button_StartStop.Name = "Button_StartStop";
 			this.Button_StartStop.Size = new System.Drawing.Size(75, 23);
-			this.Button_StartStop.TabIndex = 16;
+			this.Button_StartStop.TabIndex = 21;
 			this.Button_StartStop.Text = "Start";
 			this.Button_StartStop.UseVisualStyleBackColor = true;
-			this.Button_StartStop.Click += new System.EventHandler(this.Button_StartStop_Click);
-			// 
-			// Label_Focus
-			// 
-			this.Label_Focus.AutoSize = true;
-			this.Label_Focus.Location = new System.Drawing.Point(344, 18);
-			this.Label_Focus.Name = "Label_Focus";
-			this.Label_Focus.Size = new System.Drawing.Size(0, 16);
-			this.Label_Focus.TabIndex = 15;
 			// 
 			// DateTimePicker_TimeEntriesDate
 			// 
-			this.DateTimePicker_TimeEntriesDate.Location = new System.Drawing.Point(99, 19);
+			this.DateTimePicker_TimeEntriesDate.Location = new System.Drawing.Point(178, 6);
 			this.DateTimePicker_TimeEntriesDate.Name = "DateTimePicker_TimeEntriesDate";
 			this.DateTimePicker_TimeEntriesDate.Size = new System.Drawing.Size(238, 22);
-			this.DateTimePicker_TimeEntriesDate.TabIndex = 14;
+			this.DateTimePicker_TimeEntriesDate.TabIndex = 20;
 			this.DateTimePicker_TimeEntriesDate.ValueChanged += new System.EventHandler(this.DateTimePicker_TimeEntriesDate_ValueChanged);
 			// 
-			// button1
+			// Button_AddEntry
 			// 
-			this.button1.Location = new System.Drawing.Point(7, 18);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 23);
-			this.button1.TabIndex = 13;
-			this.button1.Text = "Add New";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.Button_AddEntry_Click);
+			this.Button_AddEntry.Location = new System.Drawing.Point(21, 42);
+			this.Button_AddEntry.Name = "Button_AddEntry";
+			this.Button_AddEntry.Size = new System.Drawing.Size(75, 23);
+			this.Button_AddEntry.TabIndex = 19;
+			this.Button_AddEntry.Text = "Add New";
+			this.Button_AddEntry.UseVisualStyleBackColor = true;
+			this.Button_AddEntry.Click += new System.EventHandler(this.Button_AddEntry_Click);
 			// 
-			// Button_Save_To_Jira
+			// Button_SaveToJira
 			// 
-			this.Button_Save_To_Jira.Location = new System.Drawing.Point(7, 239);
-			this.Button_Save_To_Jira.Name = "Button_Save_To_Jira";
-			this.Button_Save_To_Jira.Size = new System.Drawing.Size(113, 23);
-			this.Button_Save_To_Jira.TabIndex = 12;
-			this.Button_Save_To_Jira.Text = "Save to Jira";
-			this.Button_Save_To_Jira.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.Button_Save_To_Jira.UseVisualStyleBackColor = true;
-			this.Button_Save_To_Jira.Click += new System.EventHandler(this.Button_SaveToJira_Click);
+			this.Button_SaveToJira.Location = new System.Drawing.Point(21, 265);
+			this.Button_SaveToJira.Name = "Button_SaveToJira";
+			this.Button_SaveToJira.Size = new System.Drawing.Size(113, 23);
+			this.Button_SaveToJira.TabIndex = 18;
+			this.Button_SaveToJira.Text = "Save to Jira";
+			this.Button_SaveToJira.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.Button_SaveToJira.UseVisualStyleBackColor = true;
+			this.Button_SaveToJira.Click += new System.EventHandler(this.Button_SaveToJira_Click);
 			// 
 			// DataGridView_TimeEntries
 			// 
@@ -196,11 +136,11 @@ namespace JiraWorklogReport {
             this.Ended,
             this.Duration,
             this.Delete});
-			this.DataGridView_TimeEntries.Location = new System.Drawing.Point(7, 47);
+			this.DataGridView_TimeEntries.Location = new System.Drawing.Point(21, 71);
 			this.DataGridView_TimeEntries.Name = "DataGridView_TimeEntries";
 			this.DataGridView_TimeEntries.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.DataGridView_TimeEntries.Size = new System.Drawing.Size(800, 178);
-			this.DataGridView_TimeEntries.TabIndex = 11;
+			this.DataGridView_TimeEntries.Size = new System.Drawing.Size(619, 178);
+			this.DataGridView_TimeEntries.TabIndex = 17;
 			// 
 			// Description
 			// 
@@ -245,48 +185,122 @@ namespace JiraWorklogReport {
 			this.Delete.Text = "Delete";
 			this.Delete.UseColumnTextForButtonValue = true;
 			// 
-			// Form1
+			// TabPage_Report
+			// 
+			this.TabPage_Report.Controls.Add(this.label3);
+			this.TabPage_Report.Controls.Add(this.label1);
+			this.TabPage_Report.Controls.Add(this.DateTimePicker_StartDate);
+			this.TabPage_Report.Controls.Add(this.label2);
+			this.TabPage_Report.Controls.Add(this.DateTimePicker_EndDate);
+			this.TabPage_Report.Controls.Add(this.Button_CreateReport);
+			this.TabPage_Report.Location = new System.Drawing.Point(4, 25);
+			this.TabPage_Report.Name = "TabPage_Report";
+			this.TabPage_Report.Padding = new System.Windows.Forms.Padding(3);
+			this.TabPage_Report.Size = new System.Drawing.Size(685, 308);
+			this.TabPage_Report.TabIndex = 1;
+			this.TabPage_Report.Text = "Time Entries Report";
+			this.TabPage_Report.UseVisualStyleBackColor = true;
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.Location = new System.Drawing.Point(27, 51);
+			this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(35, 16);
+			this.label1.TabIndex = 10;
+			this.label1.Text = "Start";
+			// 
+			// DateTimePicker_StartDate
+			// 
+			this.DateTimePicker_StartDate.Location = new System.Drawing.Point(70, 46);
+			this.DateTimePicker_StartDate.Margin = new System.Windows.Forms.Padding(4);
+			this.DateTimePicker_StartDate.Name = "DateTimePicker_StartDate";
+			this.DateTimePicker_StartDate.Size = new System.Drawing.Size(265, 22);
+			this.DateTimePicker_StartDate.TabIndex = 8;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label2.Location = new System.Drawing.Point(27, 79);
+			this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(32, 16);
+			this.label2.TabIndex = 11;
+			this.label2.Text = "End";
+			// 
+			// DateTimePicker_EndDate
+			// 
+			this.DateTimePicker_EndDate.Location = new System.Drawing.Point(70, 79);
+			this.DateTimePicker_EndDate.Margin = new System.Windows.Forms.Padding(4);
+			this.DateTimePicker_EndDate.Name = "DateTimePicker_EndDate";
+			this.DateTimePicker_EndDate.Size = new System.Drawing.Size(265, 22);
+			this.DateTimePicker_EndDate.TabIndex = 9;
+			// 
+			// Button_CreateReport
+			// 
+			this.Button_CreateReport.Location = new System.Drawing.Point(79, 119);
+			this.Button_CreateReport.Margin = new System.Windows.Forms.Padding(4);
+			this.Button_CreateReport.Name = "Button_CreateReport";
+			this.Button_CreateReport.Size = new System.Drawing.Size(127, 28);
+			this.Button_CreateReport.TabIndex = 7;
+			this.Button_CreateReport.Text = "Create Report";
+			this.Button_CreateReport.UseVisualStyleBackColor = true;
+			this.Button_CreateReport.Click += new System.EventHandler(this.Button_CreateReport_Click);
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label3.Location = new System.Drawing.Point(27, 15);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(208, 16);
+			this.label3.TabIndex = 12;
+			this.label3.Text = "Date Range of Jira Worklogs";
+			// 
+			// Form_Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(859, 492);
-			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.Button_SaveToJira);
+			this.ClientSize = new System.Drawing.Size(728, 381);
+			this.Controls.Add(this.TabControl_TimeEntries);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Margin = new System.Windows.Forms.Padding(4);
-			this.Name = "Form1";
-			this.Text = "Form1";
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
+			this.Name = "Form_Main";
+			this.Text = "Time Clock";
+			this.TabControl_TimeEntries.ResumeLayout(false);
+			this.TabPage_TimeEntries.ResumeLayout(false);
+			this.TabPage_TimeEntries.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DataGridView_TimeEntries)).EndInit();
+			this.TabPage_Report.ResumeLayout(false);
+			this.TabPage_Report.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.Button Button_GetEntries;
-		private System.Windows.Forms.DateTimePicker DateTimePicker_StartDate;
-		private System.Windows.Forms.DateTimePicker DateTimePicker_EndDate;
-		private System.Windows.Forms.Button Button_SaveToJira;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.DataGridView DataGridView_TimeEntries;
-		private System.Windows.Forms.Button Button_Save_To_Jira;
-		private System.Windows.Forms.Button button1;
-		private DateTimePicker DateTimePicker_TimeEntriesDate;
-		private Label Label_Focus;
+		private TabControl TabControl_TimeEntries;
+		private TabPage TabPage_TimeEntries;
 		private Button Button_StartStop;
+		private DateTimePicker DateTimePicker_TimeEntriesDate;
+		private Button Button_AddEntry;
+		private Button Button_SaveToJira;
+		private DataGridView DataGridView_TimeEntries;
 		private DataGridViewTextBoxColumn Description;
 		private DataGridViewTextBoxColumn Started;
 		private DataGridViewTextBoxColumn Ended;
 		private DataGridViewTextBoxColumn Duration;
 		private DataGridViewButtonColumn Delete;
+		private TabPage TabPage_Report;
+		private Label label1;
+		private DateTimePicker DateTimePicker_StartDate;
+		private Label label2;
+		private DateTimePicker DateTimePicker_EndDate;
+		private Button Button_CreateReport;
+		private Label Label_DateFilter;
+		private Label label3;
 	}
 }
 
