@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html ng-app="timeEntriesApp">
+<head>
+    <title></title>
+    <meta charset="utf-8"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="Content/ui-grid-unstable.min.css" rel="stylesheet"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+    <script src="scripts/angular-ui/ui-bootstrap.min.js"></script>
+    <script src="scripts/angular-ui/ui-bootstrap-tpls.min.js"></script>
+    <script src="scripts/app.js"></script>
+    <script src="scripts/services/TimeEntryData.js"></script>
+    <script src="scripts/controllers/TimeEntryController.js"></script>
+
+</head>
+<body style="margin:20px;">
+
+<script>
+    var timeEntryLog = window.location.pathname;
+
+    function pad(number) {
+        if (number < 10) {
+            return '0' + number;
+        }
+    }
+
+</script>
+
+<div class="container">
+    <div class="panel panel-default" ng-controller="TimeEntryController">
+
+        Move to yesterday View time entries for <input type="text" id="datepicker">Move to tomorrow
+        <input type="submit" class="btn" value="Add New" id="Submit_AddNew"/>
+        <input type="submit" class="btn" value="Start" id="Submit_StartStop"/>
+
+        <div class="gridStyle" ng-grid="gridOptions"></div>
+    </div>
+</div>
+</body>
+</html>

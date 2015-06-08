@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using JiraWorklogReport.Annotations;
 
@@ -8,10 +7,8 @@ namespace JiraWorklogReport {
 	public class TimeEntry : INotifyPropertyChanged {
 		private string _Description;
 		private TimeSpan _Duration;
-		private string _DurationDisplay;
 		private DateTime _Ended;
 		private DateTime _Started;
-		private Stopwatch _Stopwatch;
 
 		public DateTime Started {
 			get { return _Started; }

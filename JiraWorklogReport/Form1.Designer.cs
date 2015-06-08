@@ -39,12 +39,12 @@ namespace JiraWorklogReport {
 			this.Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.TabPage_Report = new System.Windows.Forms.TabPage();
+			this.label3 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.DateTimePicker_StartDate = new System.Windows.Forms.DateTimePicker();
 			this.label2 = new System.Windows.Forms.Label();
 			this.DateTimePicker_EndDate = new System.Windows.Forms.DateTimePicker();
 			this.Button_CreateReport = new System.Windows.Forms.Button();
-			this.label3 = new System.Windows.Forms.Label();
 			this.TabControl_TimeEntries.SuspendLayout();
 			this.TabPage_TimeEntries.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.DataGridView_TimeEntries)).BeginInit();
@@ -95,6 +95,7 @@ namespace JiraWorklogReport {
 			this.Button_StartStop.TabIndex = 21;
 			this.Button_StartStop.Text = "Start";
 			this.Button_StartStop.UseVisualStyleBackColor = true;
+			this.Button_StartStop.Click += new System.EventHandler(this.Button_StartStop_Click);
 			// 
 			// DateTimePicker_TimeEntriesDate
 			// 
@@ -201,6 +202,16 @@ namespace JiraWorklogReport {
 			this.TabPage_Report.Text = "Time Entries Report";
 			this.TabPage_Report.UseVisualStyleBackColor = true;
 			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label3.Location = new System.Drawing.Point(27, 15);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(208, 16);
+			this.label3.TabIndex = 12;
+			this.label3.Text = "Date Range of Jira Worklogs";
+			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
@@ -249,16 +260,6 @@ namespace JiraWorklogReport {
 			this.Button_CreateReport.Text = "Create Report";
 			this.Button_CreateReport.UseVisualStyleBackColor = true;
 			this.Button_CreateReport.Click += new System.EventHandler(this.Button_CreateReport_Click);
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(27, 15);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(208, 16);
-			this.label3.TabIndex = 12;
-			this.label3.Text = "Date Range of Jira Worklogs";
 			// 
 			// Form_Main
 			// 
