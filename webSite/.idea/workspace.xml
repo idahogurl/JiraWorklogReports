@@ -1,27 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2a938a2f-d11d-4499-b313-3f82570114a1" name="Default" comment="In web version, got date picker and grid to talk to each other">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/ui-grid.eot" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/ui-grid.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/ui-grid.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/controllers/DatePickerCtrl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/services/DatePickerSvc.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/controllers/TimeEntryCtrl.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/services/TimeEntrySvc.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular-resource.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular-touch.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular-ui-date.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/bootstrap.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/bootstrap.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/jquery-ui-1.10.0.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/jquery-ui-1.10.0.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/moment.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/ui-grid.svg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../httpService/app/TimeEntry.php" afterPath="$PROJECT_DIR$/../httpService/app/TimeEntry.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../httpService/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../httpService/.idea/workspace.xml" />
+    <list default="true" id="2a938a2f-d11d-4499-b313-3f82570114a1" name="Default" comment="Added missing files">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="webSite.iws" />
@@ -293,7 +273,13 @@
       <option name="project" value="LOCAL" />
       <updated>1434122217330</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added missing files">
+      <created>1434122869464</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1434122869464</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -353,8 +339,14 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="In web version, got date picker and grid to talk to each other" />
-    <option name="LAST_COMMIT_MESSAGE" value="In web version, got date picker and grid to talk to each other" />
+    <MESSAGE value="Added missing files" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added missing files" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

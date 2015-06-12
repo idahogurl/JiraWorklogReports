@@ -25,6 +25,7 @@
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webSite/scripts/moment.min.js" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../webSite/Content/ui-grid.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/TimeEntry.php" afterPath="$PROJECT_DIR$/app/TimeEntry.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../webSite/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../webSite/.idea/workspace.xml" />
     </list>
