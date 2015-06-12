@@ -100,7 +100,7 @@ namespace JiraWorklogReport {
 
 		public string IssueKey {
 			get {
-				if (Description != null) {
+				if (Description != null && Description.Contains(":")) {
 					return Description.Split(':')[0];
 				}
 				return null;

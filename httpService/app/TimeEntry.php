@@ -1,8 +1,10 @@
 <?php namespace App;
+
 use DateTime;
 use Storage;
 
-class TimeEntry {
+class TimeEntry
+{
     var $Duration;
     var $Started;
     var $Ended;
@@ -12,21 +14,23 @@ class TimeEntry {
     var $DurationDisplay;
     var $IssueKey;
 
-    public function stop() {
-        $this->Ended = new DateTime();
-    }
-
-    public static function all($dateTime) {
+      public static function all($dateTime)
+    {
         if ($dateTime == null) {
-           $now = new DateTime();
-           $dateTime = $now->format("Y-m-d");
+            $now = new DateTime();
+            $dateTime = $now->format("Y-m-d");
         }
 
         $dataFileName = $dateTime . ".txt";
 
-        if(Storage::exists($dataFileName)) {
+        if (Storage::exists($dataFileName)) {
 
-            $data = json_decode(Storage::get($dataFileName));
+            $jsonString = Storage::get($dataFileName);
+
+            if ($jsonString == "") {
+                return null;
+            }
+            $data = json_decode($jsonString);
 
             $timeEntries = [];
             foreach ($data as $entry) {
@@ -40,11 +44,13 @@ class TimeEntry {
         return null;
     }
 
-    public static function find() {
+    public static function find()
+    {
     }
 
-    public static function create($json) {
-       $timeEntry = new TimeEntry();
+    public static function create($json)
+    {
+        $timeEntry = new TimeEntry();
         foreach ($json as $key => $value) {
             $timeEntry->{$key} = $value;
         }

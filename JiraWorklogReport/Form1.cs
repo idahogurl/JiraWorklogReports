@@ -132,7 +132,11 @@ namespace JiraWorklogReport {
 			TimeEntries = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));
 
 			foreach (TimeEntry timeEntry in TimeEntries) {
-				jiraConnector.InsertWorkLogEntry(ConvertToJiraTimeEntry(timeEntry));
+				if (timeEntry.IssueKey == null) {
+					MessageBox.Show("Skipped");
+				} else {
+					jiraConnector.InsertWorkLogEntry(ConvertToJiraTimeEntry(timeEntry));
+				}
 			}
 		}
 
