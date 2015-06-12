@@ -2,31 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a938a2f-d11d-4499-b313-3f82570114a1" name="Default" comment="In web version, got date picker and grid to talk to each other">
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\httpService\Icon.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\httpService\fonts\glyphicons-halflings-regular.eot" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\httpService\fonts\glyphicons-halflings-regular.svg" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\httpService\fonts\glyphicons-halflings-regular.ttf" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\httpService\fonts\glyphicons-halflings-regular.woff" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\httpService\fonts\glyphicons-halflings-regular.woff2" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\webSite\fonts\ui-grid.eot" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\webSite\fonts\ui-grid.svg" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\webSite\fonts\ui-grid.ttf" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\webSite\fonts\ui-grid.woff" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\webSite\scripts\jquery-1.9.1.min.map" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\webSite\webService\Controllers\EditEntriesController.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\webSite\webService\TimeEntry.php" afterPath="" />
-      <change type="DELETED" beforePath="C:\1_Development\Projects\JiraWorklogReport\webSite\webService\index.php" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../httpService/app/Http/Controllers/EditEntriesController.php" afterPath="$PROJECT_DIR$/../httpService/app/Http/Controllers/EditEntriesController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JiraWorklogReport/Form1.cs" afterPath="$PROJECT_DIR$/../JiraWorklogReport/Form1.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../JiraWorklogReport/TimeEntry.cs" afterPath="$PROJECT_DIR$/../JiraWorklogReport/TimeEntry.cs" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/ui-grid.eot" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/ui-grid.ttf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/ui-grid.woff" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/controllers/DatePickerCtrl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/services/DatePickerSvc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/controllers/TimeEntryCtrl.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/services/TimeEntrySvc.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular-resource.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular-touch.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular-ui-date.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/angular.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/bootstrap.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/bootstrap.min.css" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/jquery-ui-1.10.0.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/jquery-ui-1.10.0.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/scripts/moment.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Content/ui-grid.svg" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../httpService/app/TimeEntry.php" afterPath="$PROJECT_DIR$/../httpService/app/TimeEntry.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/app.js" afterPath="$PROJECT_DIR$/scripts/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../httpService/packages.config" afterPath="$PROJECT_DIR$/../httpService/packages.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/packages.config" afterPath="$PROJECT_DIR$/packages.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../httpService/app/Http/routes.php" afterPath="$PROJECT_DIR$/../httpService/app/Http/routes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../httpService/web.config" afterPath="$PROJECT_DIR$/../httpService/web.config" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../httpService/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../httpService/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -50,20 +44,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="TimeEntry.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="TimeEntry.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../httpService/app/TimeEntry.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.1">
-              <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.04866744">
+              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.21552724">
+            <state vertical-scroll-proportion="-6.2">
               <caret line="34" column="23" selection-start-line="34" selection-start-column="23" selection-end-line="34" selection-end-column="23" />
               <folding>
                 <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -115,6 +109,7 @@
         <option value="$PROJECT_DIR$/scripts/services/TimeEntrySvc.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/scripts/app.js" />
+        <option value="$PROJECT_DIR$/../httpService/app/TimeEntry.php" />
       </list>
     </option>
   </component>
@@ -292,13 +287,20 @@
       <option name="number" value="Default" />
       <updated>1433788948338</updated>
     </task>
+    <task id="LOCAL-00001" summary="In web version, got date picker and grid to talk to each other">
+      <created>1434122217330</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1434122217330</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.098958336" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.098958336" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -706,21 +708,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../httpService/app/TimeEntry.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.1">
-          <caret line="3" column="4" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21552724">
+        <state vertical-scroll-proportion="-6.2">
           <caret line="34" column="23" selection-start-line="34" selection-start-column="23" selection-end-line="34" selection-end-column="23" />
           <folding>
             <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../httpService/app/TimeEntry.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.04866744">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

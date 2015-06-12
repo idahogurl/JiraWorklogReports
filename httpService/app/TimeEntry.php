@@ -1,6 +1,5 @@
 <?php namespace App;
 
-use DateTime;
 use Storage;
 
 class TimeEntry
