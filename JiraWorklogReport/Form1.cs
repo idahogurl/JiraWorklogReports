@@ -129,7 +129,7 @@ namespace JiraWorklogReport {
 
 		private void Button_SaveToJira_Click(object sender, EventArgs e) {
 			JiraConnector jiraConnector = new JiraConnector();
-			TimeEntries = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));
+			TimeEntries.DataSource = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));
 
 			foreach (TimeEntry timeEntry in TimeEntries) {
 				if (timeEntry.IssueKey == null) {
@@ -137,8 +137,8 @@ namespace JiraWorklogReport {
 				} else {
 					jiraConnector.InsertWorkLogEntry(ConvertToJiraTimeEntry(timeEntry));
 				}
+				}
 			}
-		}
 
 		private JiraTimeEntry ConvertToJiraTimeEntry(TimeEntry timeEntry) {
 			return new JiraTimeEntry {

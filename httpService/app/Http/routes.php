@@ -12,5 +12,5 @@
 */
 Route::get('/{dateTime}', 'EditEntriesController@index');
 Route::get('/{dateTime}/{index}', 'EditEntriesController@find');
-Route::options('{dateTime}/{index}', 'EditEntriesController@save');
+Route::post('/', 'EditEntriesController@save');
 

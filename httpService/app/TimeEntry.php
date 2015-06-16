@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use Illuminate\Support\Facades\Log;
 use Storage;
 
 class TimeEntry
@@ -13,8 +14,7 @@ class TimeEntry
     var $DurationDisplay;
     var $IssueKey;
 
-      public static function all($dateTime)
-    {
+      public static function all($dateTime)     {
         if ($dateTime == null) {
             $now = new DateTime();
             $dateTime = $now->format("Y-m-d");
@@ -43,16 +43,26 @@ class TimeEntry
         return null;
     }
 
-    public static function find()
-    {
+    public static function save($dateTime, $timeEntries) {
+        $dataFileName = $dateTime . ".txt";
+        Storage::put($dataFileName, json_encode($timeEntries));
     }
 
-    public static function create($json)
-    {
+    public static function create($json) {
         $timeEntry = new TimeEntry();
         foreach ($json as $key => $value) {
             $timeEntry->{$key} = $value;
         }
         return $timeEntry;
+    }
+
+    public static function GetDurationDisplay($started, $ended) {
+       if(!empty($started) && !empty($ended)) {
+           $dateInterval = date_diff(new DateTime($ended), new DateTime($started));
+           if ($dateInterval->h == 0) {
+            return $dateInterval->m + "m";
+        }
+        return $dateInterval->h + "h " + $dateInterval->m + "m";
+       }
     }
 }
