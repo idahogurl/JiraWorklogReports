@@ -18,8 +18,11 @@ timeEntriesApp.factory("timeEntrySrv", function ($resource, $filter) {
         formatDate: function (date) {
             return $filter("date")(date, "M/dd/yyyy h:mm a");
         },
-        getDurationDisplay: function (startDateTime, endDateTime) {
-            var duration = this.getDuration(startDateTime, endDateTime);
+        getDurationDisplay: function (startedString, endedString) {
+            if (isEmpty(startedString) || isEmpty(endedString)) {
+                return null;
+            }
+            var duration = this.getDuration(new Date(startedString), new Date(endedString));
 
             if (Math.floor(duration.asMinutes()) === 0) {
                 return null;
@@ -27,13 +30,28 @@ timeEntriesApp.factory("timeEntrySrv", function ($resource, $filter) {
             if (Math.floor(duration.asHours()) === 0) {
                 return Math.floor(duration.asMinutes()) + "m";
             }
-            return Math.floor(duration.asHours()) + "h " + Math.floor(duration.asMinutes()) + "m";
+            return Math.floor(duration.asHours()) + "h " + (Math.floor(duration.asMinutes()) - (Math.floor(duration.asHours()) * 60)) + "m";
         },
         getDuration: function (startDateTime, endDateTime) {
             return moment.duration(moment(endDateTime).diff(startDateTime));
         },
         first: function () {
             //return users[0];
+        },
+        isDirty: function(timeEntry, rowEntity) {
+            if(timeEntry.Description !== rowEntity.Description) {
+                return true;
+            }
+
+            if (timeEntry.StartedString !== rowEntity.StartedString) {
+                return true;
+            }
+
+            if (timeEntry.EndedString !== rowEntity.EndedString) {
+                return true;
+            }
+
+            return false;
         }
     };
 });
@@ -112,8 +130,13 @@ timeEntriesApp.controller("datePickerCtrl", function ($scope, timeEntrySrv) {
     }
 });
 
+function isEmpty(value) {
+    if(value === null || value === "") {
+        return true;
+    }
+    return false;
+}
 timeEntriesApp.controller("timeEntryCtrl", function ($scope, $resource, $filter, timeEntrySrv) {
-    $scope.isRunning = false;
     $scope.hasData = false;
     
     $scope.gridOptions = {
@@ -133,67 +156,70 @@ timeEntriesApp.controller("timeEntryCtrl", function ($scope, $resource, $filter,
         function (timeEntries) {
             $scope.gridOptions.data = timeEntries;
             if (timeEntries.length === 0) {
-                $scope.isRunning = false;
-                $scope.hasData = false;
+               $scope.hasData = false;
             } else {
-                $scope.isRunning = timeEntries[timeEntries.length - 1].Ended == null;
-                $scope.hasData = true;
+               $scope.hasData = true;
             }
         }, function (statusCode) {
             console.log(statusCode);
         });
     }
 
-        $scope.addData = function () {
-            $scope.stopPreviousEntry();
+    $scope.addData = function () {
+        $scope.stopPreviousEntry();
 
-            $scope.gridOptions.data.push({
-            "Description": " ",
+        $scope.gridOptions.data.push({
+            "Description": null,
             "Started": null,
-            "StartedString": " ",
+            "StartedString": null,
             "Ended": null,
-            "EndedString": " ",
-            "DurationDisplay": ""
+            "EndedString": null,
+            "DurationDisplay": null
         });
 
-            $scope.hasData = true;
-        };
+
+        $scope.hasData = true;
+    };
 
     $scope.stopPreviousEntry = function () {
         //stop the previous entry
-        if ($scope.gridOptions.data.length !== 0) {
-            var currentEntry = $scope.gridOptions.data[$scope.gridOptions.data.length - 1];
-            currentEntry.Ended = new Date();
-            currentEntry.EndedString =
-                timeEntrySrv.formatDate(currentEntry.Ended);
 
-            //update duration
-            currentEntry.DurationDisplay = timeEntrySrv.getDurationDisplay(currentEntry.Started, currentEntry.Ended);
+        if ($scope.gridOptions.data.length !== 0) {
+            var lastEntry = $scope.gridOptions.data[$scope.gridOptions.data.length - 1];
+            if (isEmpty(lastEntry.EndedString)) {
+
+                lastEntry.EndedString =
+                    timeEntrySrv.formatDate(new Date());
+
+                //update duration
+                lastEntry.DurationDisplay = timeEntrySrv.getDurationDisplay(lastEntry.StartedString, lastEntry.EndedString);
+                $scope.save($scope.gridOptions.data.length - 1, lastEntry);
+            }
         }
     };
 
     $scope.startStop = function () {
         var currentEntry = $scope.gridOptions.data[$scope.gridOptions.data.length - 1];
 
-        if (currentEntry.Started == null) {
-            currentEntry.Started = timeEntrySrv.selectedDate;
-            currentEntry.StartedString = timeEntrySrv.formatDate(currentEntry.Started);
+        if (isEmpty(currentEntry.StartedString)) {
+            currentEntry.StartedString = timeEntrySrv.formatDate(timeEntrySrv.selectedDate);
         } else {
-            $scope.stopPreviousEntry();
+            currentEntry.EndedString = timeEntrySrv.formatDate(new Date());
+
+            //update duration
+            currentEntry.DurationDisplay = timeEntrySrv.getDurationDisplay(currentEntry.StartedString, currentEntry.EndedString);
         }
+        $scope.save($scope.gridOptions.data.length - 1, currentEntry);
     }
 
     $scope.gridOptions.onRegisterApi = function (gridApi) {
         //set gridApi on scope
         $scope.gridApi = gridApi;
         gridApi.edit.on.afterCellEdit($scope, function (rowEntity, colDef, newValue, oldValue) {
-
-            var rowIndex = $scope.findIndex(rowEntity);
-            $scope.save(timeEntrySrv.selectedDate, rowIndex, rowEntity);
-            $scope.$apply();
+            $scope.save($scope.findIndex(rowEntity), rowEntity);
         });
-
     };
+
     $scope.findIndex = function (row) {
         // find real row by comparing $$hashKey with entity in row
         var rowIndex = -1;
@@ -208,8 +234,10 @@ timeEntriesApp.controller("timeEntryCtrl", function ($scope, $resource, $filter,
         return rowIndex;
     };
 
-    $scope.save = function (date, rowIndex, rowEntity) {
-        var timeEntryRes = $resource("http://localhost:8181/:date/:rowIndex", {date: "@date", rowIndex: "@rowIndex"},
+    $scope.save = function (rowIndex, rowEntity) {
+
+
+        var timeEntryRes = $resource("http://localhost:8181/:date/:rowIndex", { date: "@date", rowIndex: "@rowIndex" },
             {
                 save: {
                     method: "POST"
@@ -217,27 +245,47 @@ timeEntriesApp.controller("timeEntryCtrl", function ($scope, $resource, $filter,
             }
         );
 
+
         timeEntryRes.get({
-            date: $filter("date")(date, "yyyy_MM_dd"),
+            date: $filter("date")(timeEntrySrv.selectedDate, "yyyy_MM_dd"),
             rowIndex: rowIndex
         }).$promise.then(
             function (timeEntry) {
-                timeEntry.RowIndex = rowIndex;
-                timeEntry.Date = $filter("date")(date, "yyyy_MM_dd");
-                timeEntry.Description = rowEntity.Description;
-                timeEntry.Started = rowEntity.Started;
-                timeEntry.StartedString = rowEntity.StartedString;
-                timeEntry.Ended = rowEntity.Ended;
-                timeEntry.EndedString = rowEntity.EndedString;
-                timeEntry.DurationDisplay = timeEntrySrv.getDurationDisplay(time.Started, $scope.gridOptions[rowIndex].Ended);
-                timeEntry.$save();
+                //did it really change
+                if (timeEntrySrv.isDirty(timeEntry, rowEntity)) {
+                    timeEntry.RowIndex = rowIndex;
+                    timeEntry.Date = $filter("date")(timeEntrySrv.selectedDate, "yyyy_MM_dd");
+                    timeEntry.Description = rowEntity.Description;
+                    timeEntry.StartedString = rowEntity.StartedString;
+                    timeEntry.EndedString = rowEntity.EndedString;
 
-                $scope.gridOptions[rowIndex].DurationDisplay = timeEntry.DurationDisplay;
+                    timeEntry.DurationDisplay = timeEntrySrv.getDurationDisplay(timeEntry.StartedString, timeEntry.EndedString);
+                    timeEntry.$save().then(
+                        function () {
+                            //scope.isRunning =
+                        });
+                }
+
             },
             function (statusCode) {
                 console.log(statusCode);
             }
         );
-    };
+        //$scope.$apply();
+    }
+
+    $scope.isRunning = function() {
+
+        if ($scope.gridOptions.data == undefined || $scope.gridOptions.data.length == 0) {
+            return false;
+        }
+
+        var currentEntry = $scope.gridOptions.data[$scope.gridOptions.data.length - 1];
+        return (!isEmpty(currentEntry.StartedString) && isEmpty(currentEntry.EndedString));
+    }
+
+
+
+
 });
 

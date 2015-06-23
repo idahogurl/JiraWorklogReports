@@ -139,7 +139,7 @@ namespace JiraWorklogReport {
             this.Delete});
 			this.DataGridView_TimeEntries.Location = new System.Drawing.Point(21, 71);
 			this.DataGridView_TimeEntries.Name = "DataGridView_TimeEntries";
-			this.DataGridView_TimeEntries.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.DataGridView_TimeEntries.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
 			this.DataGridView_TimeEntries.Size = new System.Drawing.Size(619, 178);
 			this.DataGridView_TimeEntries.TabIndex = 17;
 			// 

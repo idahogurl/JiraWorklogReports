@@ -34,11 +34,10 @@ class EditEntriesController extends Controller
 
         $timeEntry = $this->find($request["Date"], $request["RowIndex"]);
 
-        $timeEntry->Started = $request["Started"];
         $timeEntry->StartedString = $request["StartedString"];
-        $timeEntry->Ended = $request["Ended"];
         $timeEntry->EndedString = $request["EndedString"];
         $timeEntry->Description = $request["Description"];
+		$timeEntry->DurationDisplay = $request["DurationDisplay"];
 
         if (str_contains($request["Description"], ":")) {
             $timeEntry->IssueKey = preg_split(":", $request["Description"]);

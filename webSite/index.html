@@ -15,12 +15,6 @@
     <script src="scripts/app.js"></script>
     <script src="scripts/moment.min.js"></script>
     <script src="scripts/jquery-ui-1.10.0.min.js"></script>
-
-	<script>
-		//$(document).ready(function() {
-		//	initStartStopButton();
-		//});
-	</script>
 </head>
 <body style="margin:20px;">
 
@@ -57,7 +51,8 @@
 			<div class="panel-body">
 
 				<input type="submit" class="btn" value="Add New" ng-click="addData()"/>
-				<input type="submit" ng-class="{'btn-success': !isRunning, 'btn-danger': isRunning, 'disabled': !hasData}" value="{{isRunning ? 'Stop' : 'Start'}}" class="btn"
+				<input type="submit" ng-class="{'btn-success': !isRunning(), 'btn-danger': isRunning(), 'disabled': !hasData}"
+					   value="{{isRunning() ? 'Stop' : 'Start'}}" class="btn"
 				ng-click="startStop()"/>
 
 				<div ui-grid="gridOptions" ui-grid-edit ui-grid-row-edit ui-grid-cellnav 

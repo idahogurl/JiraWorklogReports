@@ -111,7 +111,9 @@ namespace JiraWorklogReport {
 			BindingSource bindingSource = new BindingSource();
 			//Check if file exists
 			if (!File.Exists(dataFile)) {
-				File.Create(dataFile);
+				using (FileStream fs = File.Create(dataFile)) {
+					fs.Close();
+				}
 
 				bindingSource.DataSource = new BindingList<TimeEntry>();
 			} else {
