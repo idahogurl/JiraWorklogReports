@@ -1,1 +1,0 @@
-[{"Started":"2015-06-12T09:00:00","Ended":"2015-06-12T15:37:00","StartedString":"6/12/2015 9:00 AM","EndedString":"6/12/2015 3:37 PM","Description":"POL-4160: Policy Tech - New Dev","DurationDisplay":"6h 37m","Duration":"06:37:14.2186971","IssueKey":"POL-4160"}]
