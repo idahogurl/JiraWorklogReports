@@ -179,7 +179,12 @@ namespace JiraWorklogReport {
 			
 			TimeEntry timeEntry = GetTimeEntry(LastGridViewRowIndex);
 			if (timeEntry.Started == DateTime.MinValue) {
-				timeEntry.Started = DateTimePicker_TimeEntriesDate.Value;
+				if (DateTimePicker_TimeEntriesDate.Value.Date == DateTime.Now.Date) {
+					timeEntry.Started = DateTime.Now;
+				} else {
+					timeEntry.Started = DateTimePicker_TimeEntriesDate.Value;
+				}
+				
 				Button_StartStop.Text = Resources.Stop;
 			} else {
 				timeEntry.Stop();
