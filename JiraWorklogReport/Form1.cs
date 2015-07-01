@@ -117,30 +117,43 @@ namespace JiraWorklogReport {
 
 				bindingSource.DataSource = new BindingList<TimeEntry>();
 			} else {
-				bindingSource.DataSource = JsonConvert.DeserializeObject<BindingList<TimeEntry>>(File.ReadAllText(dataFile));
+				try {
+					bindingSource.DataSource = JsonConvert.DeserializeObject<BindingList<TimeEntry>>(File.ReadAllText(dataFile));
+				} catch (Exception e) {
+					MessageBox.Show(e.Message);
+					bindingSource.DataSource = new BindingList<TimeEntry>();
+				}
 			}
 			return bindingSource;
 		}
 
 		private void Button_CreateReport_Click(object sender, EventArgs e) {
-			JiraConnector jiraConnector = new JiraConnector();
-			JiraWorklogReport jiraWorklogReport = new JiraWorklogReport();
+			try {
+				JiraConnector jiraConnector = new JiraConnector();
+				JiraWorklogReport jiraWorklogReport = new JiraWorklogReport();
 
-			jiraWorklogReport.WriteReport(jiraConnector.GetTimeEntries(DateTimePicker_StartDate.Value, DateTimePicker_EndDate.Value));
+				jiraWorklogReport.WriteReport(jiraConnector.GetTimeEntries(DateTimePicker_StartDate.Value, DateTimePicker_EndDate.Value));
+			} catch (Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		private void Button_SaveToJira_Click(object sender, EventArgs e) {
-			JiraConnector jiraConnector = new JiraConnector();
-			TimeEntries.DataSource = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));
+			try {
+				JiraConnector jiraConnector = new JiraConnector();
+				TimeEntries.DataSource = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));
 
-			foreach (TimeEntry timeEntry in TimeEntries) {
-				if (timeEntry.IssueKey == null) {
-					MessageBox.Show("Skipped");
-				} else {
-					jiraConnector.InsertWorkLogEntry(ConvertToJiraTimeEntry(timeEntry));
+				foreach (TimeEntry timeEntry in TimeEntries) {
+					if (timeEntry.IssueKey == null) {
+						MessageBox.Show("Skipped");
+					} else {
+						jiraConnector.InsertWorkLogEntry(ConvertToJiraTimeEntry(timeEntry));
+					}
 				}
-				}
+			} catch (Exception ex) {
+				MessageBox.Show(ex.Message);
 			}
+		}
 
 		private JiraTimeEntry ConvertToJiraTimeEntry(TimeEntry timeEntry) {
 			return new JiraTimeEntry {
@@ -151,7 +164,11 @@ namespace JiraWorklogReport {
 		}
 
 		private void WriteDataFile() {
-			File.WriteAllText(GetDataFileName(DateTimePicker_TimeEntriesDate.Value), JsonConvert.SerializeObject(TimeEntries.List));
+			try {
+				File.WriteAllText(GetDataFileName(DateTimePicker_TimeEntriesDate.Value), JsonConvert.SerializeObject(TimeEntries.List));
+			} catch (Exception e) {
+				MessageBox.Show(e.Message);
+			}
 		}
 
 		private TimeEntry GetTimeEntry(int rowIndex) {

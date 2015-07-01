@@ -9,12 +9,35 @@ using Newtonsoft.Json.Linq;
 
 namespace JiraWorklogReport {
 	public class JiraConnector {
-		private const string UserName = "rvest";
-		private const string Password = "Re&99ba1-2/15";
-		
+		private JiraAuthUser _AuthUser;
+
+		public JiraConnector() {
+			const string configIniPath = "C:\\1_Development\\Projects\\JiraWorklogReport\\TimeEntries\\config.ini";
+			if (!File.Exists(configIniPath)) {
+				using (FileStream fs = File.Create(configIniPath)) {
+					fs.Close();
+				}
+				
+				throw new Exception("Missing configuration file");
+			}
+			_AuthUser = JsonConvert.DeserializeObject<JiraAuthUser>(File.ReadAllText(configIniPath));
+
+			if (_AuthUser == null) {
+				_AuthUser = new JiraAuthUser();
+				try {
+					File.WriteAllText(configIniPath, JsonConvert.SerializeObject(_AuthUser));
+				} catch (Exception e) {
+					MessageBox.Show(e.Message);
+				}
+			}
+
+			if (string.IsNullOrEmpty(_AuthUser.Username) || string.IsNullOrEmpty(_AuthUser.Password)) { 
+				throw new Exception("Empty configuration file");
+			}
+		}
 
 		public List<JiraTimeEntry> GetTimeEntries(DateTime fromDate, DateTime toDate) {
-			RestClient client = new RestClient(UserName, Password);
+			RestClient client = new RestClient(_AuthUser.Username, _AuthUser.Password);
 
 			const string dateFormat = "dd/MMM/yy";
 
@@ -22,11 +45,13 @@ namespace JiraWorklogReport {
 				string.Format(
 					"https://jira.navexglobal.com/rest/timesheet-gadget/1.0/raw-timesheet.json?targetUser=rvest&startDate={0}&endDate={1}",
 					fromDate.ToString(dateFormat), toDate.ToString(dateFormat));
-			client.UserName = "rvest";
-			client.Password = "Re&99ba1-2/15";
+
 
 			string json = client.MakeRequest("");
 
+			if (json == null) { //a connection error happened
+				return new List<JiraTimeEntry>();
+			}
 			return GetTimeEntries(JsonConvert.DeserializeObject<RootObject>(json).Worklogs);
 		}
 
@@ -43,7 +68,7 @@ namespace JiraWorklogReport {
 		}
 
 		public void InsertWorkLogEntry(JiraTimeEntry timeEntry) {
-			RestClient client = new RestClient(UserName, Password);
+			RestClient client = new RestClient(_AuthUser.Username, _AuthUser.Password);
 			client.EndPoint = string.Format("https://jira.navexglobal.com/rest/api/2/issue/{0}/worklog", timeEntry.IssueKey);
 
 			string timeEntryDisplay = timeEntry.IssueKey + ": " + timeEntry.StartedLocal + " (" + timeEntry.TimeSpentDisplay + ")";
