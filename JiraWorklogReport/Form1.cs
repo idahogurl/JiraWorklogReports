@@ -18,7 +18,8 @@ namespace JiraWorklogReport {
 			DataGridView_TimeEntries.CellValueChanged += DataGridView_TimeEntriesOnCellValueChanged;
 
 			Button_StartStop.Text = GetButtonStartStopText();
-		}
+            Label_TotalHoursValue.Text = GetWorkLogTotal();
+        }
 
 		private int LastGridViewRowIndex => DataGridView_TimeEntries.Rows.GetLastRow(DataGridViewElementStates.None);
 		public int CurrentRowIndex { get; set; }
@@ -72,7 +73,9 @@ namespace JiraWorklogReport {
 				BeginEdit("Duration");
 				timeEntry.Duration = TimeEntry.GetDurationTimeSpan(timeEntry.Started, timeEntry.Ended);
 				EndEdit();
-			}
+
+                Label_TotalHoursValue.Text = GetWorkLogTotal();
+            }
 
 			if (DataGridView_TimeEntries.Columns[cellEventArgs.ColumnIndex].Name  == "Ended") {
 				TimeEntry timeEntry = GetTimeEntry(cellEventArgs.RowIndex);
@@ -87,11 +90,21 @@ namespace JiraWorklogReport {
 				BeginEdit("Duration");
 				timeEntry.Duration = TimeEntry.GetDurationTimeSpan(timeEntry.Started, timeEntry.Ended);
 				EndEdit();
-			}
-			
+
+                Label_TotalHoursValue.Text = GetWorkLogTotal();
+            }
 		}
 
-		private void BeginEdit(string columnName) {
+	    private string GetWorkLogTotal() {
+	        TimeSpan totalTimeSpan = new TimeSpan();
+	        //Loop through time entries and recalculate duration
+	        foreach (TimeEntry timeEntry in TimeEntries) {
+	            totalTimeSpan = totalTimeSpan.Add(timeEntry.Duration);
+	        }
+	        return JiraTimeEntry.GetTimeSpentDisplay(totalTimeSpan);
+	    }
+
+	    private void BeginEdit(string columnName) {
 			DataGridView_TimeEntries.CurrentCell = DataGridView_TimeEntries.Rows[LastGridViewRowIndex].Cells[columnName];
 			DataGridView_TimeEntries.BeginEdit(true);
 		}
@@ -177,43 +190,44 @@ namespace JiraWorklogReport {
 			}
 			return (TimeEntry) DataGridView_TimeEntries.Rows[rowIndex].DataBoundItem;
 		}
-
-		private void Button_AddEntry_Click(object sender, EventArgs e) {
-			TimeEntry timeEntry = GetTimeEntry(LastGridViewRowIndex);
-
-			//Stop the previous time entry
-			if (timeEntry != null) {
-				timeEntry.Stop();
-			}
-
-			TimeEntries.Add(new TimeEntry());
-			WriteDataFile();
-		}
-
+        
 		private void Button_StartStop_Click(object sender, EventArgs e) {
-			//Place the Started cell into Edit Mode
-			BeginEdit("Started");
-			
-			TimeEntry timeEntry = GetTimeEntry(LastGridViewRowIndex);
-			if (timeEntry.Started == DateTime.MinValue) {
-				if (DateTimePicker_TimeEntriesDate.Value.Date == DateTime.Now.Date) {
-					timeEntry.Started = DateTime.Now;
-				} else {
-					timeEntry.Started = DateTimePicker_TimeEntriesDate.Value;
-				}
-				
-				Button_StartStop.Text = Resources.Stop;
-			} else {
-				timeEntry.Stop();
+			DateTime dateTimeToSet = GetDateTimeToSet();
+
+		    TimeEntry timeEntry = GetTimeEntry(LastGridViewRowIndex);
+		    if (timeEntry == null) { //Start new work log for the date
+		       timeEntry = new TimeEntry();
+		    }
+
+            if (timeEntry.Started != DateTime.MinValue) { //Stop was clicked
+                timeEntry.Stop(dateTimeToSet);
 				Button_StartStop.Text = Resources.Start;
-			}
+            } else {
+                TimeEntries.Add(timeEntry);
+                timeEntry.Started = dateTimeToSet;
+
+                WriteDataFile();
+
+                Button_StartStop.Text = Resources.Stop;
+            }
 			EndEdit();
 		}
 
-		private void DateTimePicker_TimeEntriesDate_ValueChanged(object sender, EventArgs e) {
+	    private DateTime GetDateTimeToSet() {
+	        DateTime dateTimeToSet = DateTime.Now;
+	        //Use the date picker value to set the Start or 
+	        //Stop time when modifying work log of a past date
+	        if (DateTimePicker_TimeEntriesDate.Value.Date != dateTimeToSet.Date) {
+	            dateTimeToSet = DateTimePicker_TimeEntriesDate.Value;
+	        }
+	        return dateTimeToSet;
+	    }
+
+	    private void DateTimePicker_TimeEntriesDate_ValueChanged(object sender, EventArgs e) {
 			TimeEntries.DataSource = GetTimeEntries(GetDataFileName(DateTimePicker_TimeEntriesDate.Value));
 			TimeEntries.ResetBindings(false);
 			Button_StartStop.Text = GetButtonStartStopText();
-		}
+            Label_TotalHoursValue.Text = GetWorkLogTotal();
+        }
 	}
 }

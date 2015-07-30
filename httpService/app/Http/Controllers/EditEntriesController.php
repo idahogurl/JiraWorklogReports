@@ -15,10 +15,18 @@ class EditEntriesController extends Controller
         $this->middleware('modHeaders');
     }
 
-    public function index($dateTime)
+	public function index($dateTime)
     {
-        return TimeEntry::all($dateTime);
+		return TimeEntry::all($dateTime);
     }
+	
+	public function all() {
+		
+		$now = new DateTime();
+        $dateTime = $now->format("Y-m-d");
+		return TimeEntry::all($dateTime);
+		
+	}
 
     public function find($dateTime, $rowIndex)
     {

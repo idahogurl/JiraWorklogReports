@@ -13,11 +13,8 @@ class TimeEntry
     var $DurationDisplay;
     var $IssueKey;
 
-      public static function all($dateTime)     {
-        if ($dateTime == null) {
-            $now = new DateTime();
-            $dateTime = $now->format("Y-m-d");
-        }
+	public static function all($dateTime)     {
+		
 
         $dataFileName = $dateTime . ".txt";
 

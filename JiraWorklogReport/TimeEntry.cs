@@ -114,10 +114,14 @@ namespace JiraWorklogReport {
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		public void Stop() {
-			Ended = DateTime.Now;
+		public void Stop(DateTime stopDateTime) {
+			Ended = stopDateTime;
 			Duration = GetDurationTimeSpan(Started, Ended);
 		}
+
+	    public void Start() {
+	        
+	    }
 
 		public static TimeSpan GetDurationTimeSpan(DateTime startDateTime, DateTime endDateTime) {
 			if (startDateTime == DateTime.MinValue || endDateTime == DateTime.MinValue) {

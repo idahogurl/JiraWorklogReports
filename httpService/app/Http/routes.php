@@ -11,6 +11,7 @@
 |
 */
 Route::get('/{dateTime}', 'EditEntriesController@index');
+Route::get('/all',  'EditEntriesController@all');
 Route::get('/{dateTime}/{index}', 'EditEntriesController@find');
 Route::post('/', 'EditEntriesController@save');
 
