@@ -195,23 +195,30 @@ namespace JiraWorklogReport {
 			DateTime dateTimeToSet = GetDateTimeToSet();
 
 		    TimeEntry timeEntry = GetTimeEntry(LastGridViewRowIndex);
-		    if (timeEntry == null) { //Start new work log for the date
-		       timeEntry = new TimeEntry();
+
+            if (StartNewEntry(timeEntry))
+		    {
+		        //Start new work log for the date
+		        timeEntry = new TimeEntry();
+                timeEntry.Started = dateTimeToSet;
+                TimeEntries.Add(timeEntry);
+                Button_StartStop.Text = Resources.Stop;
+		    }
+		    else
+		    {
+		        timeEntry.Stop(dateTimeToSet);
+				Button_StartStop.Text = Resources.Start;
 		    }
 
-            if (timeEntry.Started != DateTime.MinValue) { //Stop was clicked
-                timeEntry.Stop(dateTimeToSet);
-				Button_StartStop.Text = Resources.Start;
-            } else {
-                TimeEntries.Add(timeEntry);
-                timeEntry.Started = dateTimeToSet;
-
-                WriteDataFile();
-
-                Button_StartStop.Text = Resources.Stop;
-            }
-			EndEdit();
+            WriteDataFile();
+            EndEdit();
 		}
+
+	    private static bool StartNewEntry(TimeEntry timeEntry)
+	    {
+            //No entries yet or the previous entry has ended
+	        return timeEntry == null || (timeEntry.Started != DateTime.MinValue && timeEntry.Ended != DateTime.MinValue);
+	    }
 
 	    private DateTime GetDateTimeToSet() {
 	        DateTime dateTimeToSet = DateTime.Now;

@@ -27,6 +27,8 @@ namespace JiraWorklogReport {
 		private void InitializeComponent() {
             this.TabControl_TimeEntries = new System.Windows.Forms.TabControl();
             this.TabPage_TimeEntries = new System.Windows.Forms.TabPage();
+            this.Label_TotalHoursValue = new System.Windows.Forms.Label();
+            this.Label_TotalHours = new System.Windows.Forms.Label();
             this.Label_DateFilter = new System.Windows.Forms.Label();
             this.Button_StartStop = new System.Windows.Forms.Button();
             this.DateTimePicker_TimeEntriesDate = new System.Windows.Forms.DateTimePicker();
@@ -44,8 +46,6 @@ namespace JiraWorklogReport {
             this.label2 = new System.Windows.Forms.Label();
             this.DateTimePicker_EndDate = new System.Windows.Forms.DateTimePicker();
             this.Button_CreateReport = new System.Windows.Forms.Button();
-            this.Label_TotalHours = new System.Windows.Forms.Label();
-            this.Label_TotalHoursValue = new System.Windows.Forms.Label();
             this.TabControl_TimeEntries.SuspendLayout();
             this.TabPage_TimeEntries.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView_TimeEntries)).BeginInit();
@@ -78,6 +78,25 @@ namespace JiraWorklogReport {
             this.TabPage_TimeEntries.TabIndex = 0;
             this.TabPage_TimeEntries.Text = "Time Entries";
             this.TabPage_TimeEntries.UseVisualStyleBackColor = true;
+            // 
+            // Label_TotalHoursValue
+            // 
+            this.Label_TotalHoursValue.AutoSize = true;
+            this.Label_TotalHoursValue.Location = new System.Drawing.Point(517, 265);
+            this.Label_TotalHoursValue.Name = "Label_TotalHoursValue";
+            this.Label_TotalHoursValue.Size = new System.Drawing.Size(46, 16);
+            this.Label_TotalHoursValue.TabIndex = 24;
+            this.Label_TotalHoursValue.Text = "0 h 0m";
+            // 
+            // Label_TotalHours
+            // 
+            this.Label_TotalHours.AutoSize = true;
+            this.Label_TotalHours.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label_TotalHours.Location = new System.Drawing.Point(422, 265);
+            this.Label_TotalHours.Name = "Label_TotalHours";
+            this.Label_TotalHours.Size = new System.Drawing.Size(44, 16);
+            this.Label_TotalHours.TabIndex = 23;
+            this.Label_TotalHours.Text = "Total";
             // 
             // Label_DateFilter
             // 
@@ -252,25 +271,6 @@ namespace JiraWorklogReport {
             this.Button_CreateReport.Text = "Create Report";
             this.Button_CreateReport.UseVisualStyleBackColor = true;
             this.Button_CreateReport.Click += new System.EventHandler(this.Button_CreateReport_Click);
-            // 
-            // Label_TotalHours
-            // 
-            this.Label_TotalHours.AutoSize = true;
-            this.Label_TotalHours.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label_TotalHours.Location = new System.Drawing.Point(422, 265);
-            this.Label_TotalHours.Name = "Label_TotalHours";
-            this.Label_TotalHours.Size = new System.Drawing.Size(89, 16);
-            this.Label_TotalHours.TabIndex = 23;
-            this.Label_TotalHours.Text = "Total Hours";
-            // 
-            // Label_TotalHoursValue
-            // 
-            this.Label_TotalHoursValue.AutoSize = true;
-            this.Label_TotalHoursValue.Location = new System.Drawing.Point(517, 265);
-            this.Label_TotalHoursValue.Name = "Label_TotalHoursValue";
-            this.Label_TotalHoursValue.Size = new System.Drawing.Size(46, 16);
-            this.Label_TotalHoursValue.TabIndex = 24;
-            this.Label_TotalHoursValue.Text = "0 h 0m";
             // 
             // Form_Main
             // 

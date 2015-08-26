@@ -42,9 +42,8 @@ namespace JiraWorklogReport {
 			const string dateFormat = "dd/MMM/yy";
 
 			client.EndPoint =
-				string.Format(
-					"https://jira.navexglobal.com/rest/timesheet-gadget/1.0/raw-timesheet.json?targetUser=rvest&startDate={0}&endDate={1}",
-					fromDate.ToString(dateFormat), toDate.ToString(dateFormat));
+				$"{_AuthUser.JiraUrl}/rest/timesheet-gadget/1.0/raw-timesheet.json?" +
+				$"targetUser={_AuthUser.Username}&startDate={fromDate.ToString(dateFormat)}&endDate={toDate.ToString(dateFormat)}";
 
 
 			string json = client.MakeRequest("");
@@ -69,7 +68,7 @@ namespace JiraWorklogReport {
 
 		public void InsertWorkLogEntry(JiraTimeEntry timeEntry) {
 			RestClient client = new RestClient(_AuthUser.Username, _AuthUser.Password);
-			client.EndPoint = string.Format("https://jira.navexglobal.com/rest/api/2/issue/{0}/worklog", timeEntry.IssueKey);
+			client.EndPoint = $"/rest/api/2/issue/{timeEntry.IssueKey}/worklog";
 
 			string timeEntryDisplay = timeEntry.IssueKey + ": " + timeEntry.StartedLocal + " (" + timeEntry.TimeSpentDisplay + ")";
 
