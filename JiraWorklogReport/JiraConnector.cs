@@ -68,7 +68,7 @@ namespace JiraWorklogReport {
 
 		public void InsertWorkLogEntry(JiraTimeEntry timeEntry) {
 			RestClient client = new RestClient(_AuthUser.Username, _AuthUser.Password);
-			client.EndPoint = $"/rest/api/2/issue/{timeEntry.IssueKey}/worklog";
+			client.EndPoint = $"{_AuthUser.JiraUrl}/rest/api/2/issue/{timeEntry.IssueKey}/worklog";
 
 			string timeEntryDisplay = timeEntry.IssueKey + ": " + timeEntry.StartedLocal + " (" + timeEntry.TimeSpentDisplay + ")";
 
